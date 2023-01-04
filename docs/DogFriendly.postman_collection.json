@@ -1,0 +1,589 @@
+{
+	"info": {
+		"_postman_id": "a8dd8911-7861-4a3d-928e-e1c6c8aa521a",
+		"name": "DogFriendly",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Usuario",
+			"item": [
+				{
+					"name": "GET USUARIO",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8082/usuario/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"usuario",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE USUARIO",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n    \"nombre\": \"Rodrigo\",\r\n    \"apellido1\": \"Velzquez\",\r\n    \"apellido2\": \"Garcia\",\r\n    \"email\": \"rodrigarcia@gmail.com\",\r\n    \"fechaNacimiento\": \"2022-12-13T00:00:00.000Z\",\r\n    \"login\": \"admin\",\r\n    \"password\": \"73ec8dee81ea4c9e7515d63c9e5bbb707c7bc4789363c5afa401d3aa780630f6\",\r\n    \"tipousuario\": {\r\n        \"id\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/usuario/",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"usuario",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE USUARIO",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 3,\r\n    \"nombre\": \"Aguila\",\r\n    \"apellido1\": \"Velzquez\",\r\n    \"apellido2\": \"Garcia\",\r\n    \"email\": \"rodrigarcia@gmail.com\",\r\n    \"fechaNacimiento\": \"2022-12-13T00:00:00.000Z\",\r\n    \"login\": \"admin\",\r\n    \"password\": \"73ec8dee81ea4c9e7515d63c9e5bbb707c7bc4789363c5afa401d3aa780630f6\",\r\n    \"tipousuario\": {\r\n        \"id\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/usuario",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"usuario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE USUARIO",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/usuario/4",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"usuario",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "COUNT USUARIO",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/usuario/count",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"usuario",
+								"count"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Perro",
+			"item": [
+				{
+					"name": "GET PERRO",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8082/perro/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"perro",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE PERRO",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Sr.Wilson\",\r\n    \"fechaNacimiento\": \"2022-12-19T00:00:00.000Z\",\r\n    \"genero\": 1,\r\n    \"imagen\": null,\r\n    \"peso\": 20,\r\n    \"sociable\": true,\r\n    \"puedeIrSuelto\": true,\r\n    \"esJugueton\": true,\r\n    \"razas\": {\r\n        \"id\": 1\r\n    },\r\n    \"usuario\": {\r\n        \"id\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/perro/",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"perro",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE PERRO",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"nombre\": \"camilo\",\r\n    \"fechaNacimiento\": \"2022-12-19T00:00:00.000Z\",\r\n    \"genero\": 1,\r\n    \"imagen\": null,\r\n    \"peso\": 20,\r\n    \"sociable\": true,\r\n    \"puedeIrSuelto\": true,\r\n    \"esJugueton\": true,\r\n    \"razas\": {\r\n        \"id\": 1\r\n    },\r\n    \"usuario\": {\r\n        \"id\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/usuario",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"usuario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE PERRO",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/perro/4",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"perro",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "COUNT PERRO",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/perro/count",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"perro",
+								"count"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Paseo",
+			"item": [
+				{
+					"name": "GET PASEO",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8082/paseo/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"paseo",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE PASEO",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fecha\": \"2022-12-19T00:00:00.000Z\",\r\n    \"lugar\": \"El rio\",\r\n    \"precio\": 20.0,\r\n    \"tipopaseo\": {\r\n        \"id\": 1\r\n    },\r\n    \"usuario\": {\r\n        \"id\": 1\r\n    },\r\n    \"perro\": {\r\n        \"id\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/paseo/",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"paseo",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE PERRO",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 2,\r\n    \"fecha\": \"2022-12-19T00:00:00.000Z\",\r\n    \"lugar\": \"Parque Central (Valencia)\",\r\n    \"precio\": 20.0,\r\n    \"tipopaseo\": {\r\n        \"id\": 1\r\n    },\r\n    \"usuario\": {\r\n        \"id\": 1\r\n    },\r\n    \"perro\": {\r\n        \"id\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/paseo",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"paseo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE PERRO",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/paseo/4",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"paseo",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "COUNT PASEO",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/paseo/count",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"paseo",
+								"count"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Raza",
+			"item": [
+				{
+					"name": "GET RAZA",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8082/raza/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"raza",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE RAZA",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Bulterrier\",\r\n    \"tamanyo\": \"mediano\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/raza/",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"raza",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE RAZA",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"nombre\": \"Bulterrier\",\r\n    \"tamanyo\": \"mediano\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/paseo",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"paseo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE RAZA",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/raza/4",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"raza",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "COUNT RAZA",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8082/raza/count",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"raza",
+								"count"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "LOGIN ADMIN",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"login\":\"admin\",\n\"password\":\"73ec8dee81ea4c9e7515d63c9e5bbb707c7bc4789363c5afa401d3aa780630f6\"\n}\n"
+				},
+				"url": {
+					"raw": "http://localhost:8082/session",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"session"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

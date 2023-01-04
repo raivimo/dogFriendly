@@ -1,0 +1,149 @@
+package com.raimon.dogfriendly.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import com.raimon.dogfriendly.entity.UsuarioEntity;
+import com.raimon.dogfriendly.exception.CannotPerformOperationException;
+import com.raimon.dogfriendly.exception.ResourceNotFoundException;
+import com.raimon.dogfriendly.exception.ResourceNotModifiedException;
+import com.raimon.dogfriendly.exception.ValidationException;
+import com.raimon.dogfriendly.helper.RandomHelper;
+import com.raimon.dogfriendly.helper.ValidationHelper;
+import com.raimon.dogfriendly.repository.UsuarioRepository;
+
+@Service
+public class UsuarioService {
+
+    private final String DOGFRIENDLY_DEFAULT_PASSWORD = "73ec8dee81ea4c9e7515d63c9e5bbb707c7bc4789363c5afa401d3aa780630f6";
+
+    @Autowired
+    UsuarioRepository oUsuarioRepository;
+
+    @Autowired
+    TipousuarioService oTipousuarioService;
+
+    @Autowired
+    AuthService oAuthService;
+
+    // -- Start Validation -- 
+    public void validate(Long id) {
+        if (!oUsuarioRepository.existsById(id)) {
+            throw new ResourceNotFoundException("id " + id + " not exist");
+        }
+    }
+
+    public void validate(UsuarioEntity oUsuarioEntity) {
+        ValidationHelper.validateStringLength(oUsuarioEntity.getNombre(), 2, 50, "campo name de Developer(el campo debe tener longitud de 2 a 50 caracteres)");
+        ValidationHelper.validateStringLength(oUsuarioEntity.getApellido1(), 2, 50, "campo surname de Developer(el campo debe tener longitud de 2 a 50 caracteres)");
+        ValidationHelper.validateStringLength(oUsuarioEntity.getApellido2(), 2, 50, "campo lastname de Developer(el campo debe tener longitud de 2 a 50 caracteres)");
+        ValidationHelper.validateEmail(oUsuarioEntity.getEmail(), "campo email de Usuario");
+        ValidationHelper.validateLogin(oUsuarioEntity.getLogin(), "campo login de Usuario");
+        if (oUsuarioRepository.findByLogin(oUsuarioEntity.getLogin())) {
+            throw new ValidationException("el campo login está repetido");
+        }
+        oTipousuarioService.validate(oUsuarioEntity.getTipousuario().getId());
+    }
+
+    // -- End Validation -- 
+    public Long create(UsuarioEntity oNewUsuarioEntity) {
+        //oAuthService.OnlyAdmins();
+        //validate(oNewUsuarioEntity);
+        oNewUsuarioEntity.setId(0L);
+        oNewUsuarioEntity.setPassword(DOGFRIENDLY_DEFAULT_PASSWORD);
+        return oUsuarioRepository.save(oNewUsuarioEntity).getId();
+    }
+
+    public UsuarioEntity get(Long id) {
+        return oUsuarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario with id: " + id + " not found"));
+    }
+
+    public Long count() {
+        oAuthService.OnlyAdmins();
+        return oUsuarioRepository.count();
+    }
+
+    public Long update(UsuarioEntity oUsuarioEntity) {
+        validate(oUsuarioEntity.getId());
+        //oAuthService.OnlyAdmins();
+        UsuarioEntity oOldUsuarioEntity=oUsuarioRepository.getReferenceById(oUsuarioEntity.getId());
+        oUsuarioEntity.setPassword(oOldUsuarioEntity.getPassword());
+        return oUsuarioRepository.save(oUsuarioEntity).getId();
+    }
+
+    public Long delete(Long id) {
+        oAuthService.OnlyAdmins();
+        validate(id);
+        oUsuarioRepository.deleteById(id);
+        if (oUsuarioRepository.existsById(id)) {
+            throw new ResourceNotModifiedException("can't remove register " + id);
+        } else {
+            return id;
+        }
+    }
+
+    public UsuarioEntity getOneRandom() {
+        if (count() > 0) {
+            UsuarioEntity oUsuarioEntity = null;
+            int iPosicion = RandomHelper.getRandomInt(0, (int) oUsuarioRepository.count() - 1);
+            Pageable oPageable = PageRequest.of(iPosicion, 1);
+            Page<UsuarioEntity> usuarioPage = oUsuarioRepository.findAll(oPageable);
+            List<UsuarioEntity> usuarioList = usuarioPage.getContent();
+            oUsuarioEntity = oUsuarioRepository.getReferenceById(oUsuarioEntity.getId());
+            return oUsuarioEntity;
+        } else {
+            throw new CannotPerformOperationException("ho hay usuarios en la base de datos");
+        }
+    }
+
+    public Page<UsuarioEntity> getPage(Pageable oPageable, String strFilter, Long lTipoUsuario) {
+        //oAuthService.OnlyAdmins();
+        ValidationHelper.validateRPP(oPageable.getPageSize());
+        Page<UsuarioEntity> oPage = null;
+        if (lTipoUsuario == null) {
+            if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                oPage = oUsuarioRepository.findAll(oPageable);
+            } else {
+                oPage = oUsuarioRepository.findByNombreIgnoreCaseContainingOrApellido1IgnoreCaseContainingOrApellido2IgnoreCaseContaining(
+                        strFilter, strFilter, strFilter, oPageable);
+            }
+        } else {
+            if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                oPage = oUsuarioRepository.findByTipousuarioId(lTipoUsuario, oPageable);
+            } else {
+                oPage = oUsuarioRepository.findByTipousuarioIdAndNombreIgnoreCaseContainingOrApellido1IgnoreCaseContainingOrApellido2IgnoreCaseContaining(
+                        lTipoUsuario, strFilter, strFilter, strFilter, oPageable);
+            }
+        }
+        return oPage;
+    }
+
+
+  
+
+    
+
+  
+    
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+}
