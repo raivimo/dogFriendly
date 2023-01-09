@@ -183,9 +183,9 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`id`, `nombre`, `apellido1`, `apellido2`, `email`, `fechaNacimiento`, `login`, `password`, `id_tipousuario`) VALUES
 (1, 'raimon', 'vilar', 'morera', 'raimonv@gmail.com', '2022-12-13', 'admin', '73ec8dee81ea4c9e7515d63c9e5bbb707c7bc4789363c5afa401d3aa780630f6', 1),
-(3, 'Josefina', 'Velzquez', 'Garcia', 'rodrigarcia@gmail.com', '2022-12-12', 'josefina', '73ec8dee81ea4c9e7515d63c9e5bbb707c7bc4789363c5afa401d3aa780630f6', 1),
-(6, 'Rodrigo', 'Velzquez', 'Garcia', 'rodrigarcia@gmail.com', '2022-12-12', 'rodrigo', '73ec8dee81ea4c9e7515d63c9e5bbb707c7bc4789363c5afa401d3aa780630f6', 1),
-(7, 'Marisa Perez', 'Velzquez', 'Garcia', 'rodrigarcia@gmail.com', '2022-12-12', 'marisa', '73ec8dee81ea4c9e7515d63c9e5bbb707c7bc4789363c5afa401d3aa780630f6', 1),
+(3, 'Josefina', 'Velazquez', 'Garcia', 'rodrigarcia@gmail.com', '2022-12-12', 'josefina', '73ec8dee81ea4c9e7515d63c9e5bbb707c7bc4789363c5afa401d3aa780630f6', 1),
+(6, 'Rodrigo', 'Cosafina', 'Peleon', 'rodrigarcia@gmail.com', '2022-12-12', 'rodrigo', '73ec8dee81ea4c9e7515d63c9e5bbb707c7bc4789363c5afa401d3aa780630f6', 1),
+(7, 'Marisa Perez', 'Casanueva', 'Perez', 'rodrigarcia@gmail.com', '2022-12-12', 'marisa', '73ec8dee81ea4c9e7515d63c9e5bbb707c7bc4789363c5afa401d3aa780630f6', 1),
 (8, 'Antonia', 'Lagarto', 'Casanova', 'rodrigarcia@gmail.com', '2022-12-12', 'antonio', '73ec8dee81ea4c9e7515d63c9e5bbb707c7bc4789363c5afa401d3aa780630f6', 1);
 
 --

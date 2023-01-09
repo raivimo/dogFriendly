@@ -61,6 +61,15 @@ public class UsuarioController {
         return new ResponseEntity<Page<UsuarioEntity>>(oUsuarioService.getPage(oPageable, strFilter, lTipoUsuario), HttpStatus.OK);
     }
 
+    @PostMapping("/generate")
+    public ResponseEntity<UsuarioEntity> generateOne() {
+        return new ResponseEntity<>(oUsuarioService.generateOne(), HttpStatus.OK);
+    }
+
+    @PostMapping("/generate/{amount}")
+    public ResponseEntity<Long> generateSome(@PathVariable Long amount) {
+        return new ResponseEntity<>(oUsuarioService.generateSome(amount), HttpStatus.OK);
+    }
 
 
 

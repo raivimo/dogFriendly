@@ -1,5 +1,6 @@
 package com.raimon.dogfriendly.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,24 @@ import com.raimon.dogfriendly.exception.ResourceNotModifiedException;
 import com.raimon.dogfriendly.exception.ValidationException;
 import com.raimon.dogfriendly.helper.RandomHelper;
 import com.raimon.dogfriendly.helper.ValidationHelper;
+import com.raimon.dogfriendly.repository.TipousuarioRepository;
 import com.raimon.dogfriendly.repository.UsuarioRepository;
 
 @Service
 public class UsuarioService {
 
     private final String DOGFRIENDLY_DEFAULT_PASSWORD = "73ec8dee81ea4c9e7515d63c9e5bbb707c7bc4789363c5afa401d3aa780630f6";
+    private final List<String> names = List.of("Ainhoa", "Kevin", "Estefania", "Cristina",
+            "Jose Maria", "Lucas Ezequiel", "Carlos", "Elliot", "Alexis", "Ruben", "Luis Fernando", "Karim", "Luis",
+            "Jose David", "Nerea", "Ximo", "Iris", "Alvaro", "Mario", "Raimon");
+
+    private final List<String> surnames = List.of("Benito", "Blanco", "Boriko", "Carrascosa", "Guerrero", "Gyori",
+            "Lazaro", "Luque", "Perez", "Perez", "Perez", "Rezgaoui", "Rodríguez", "Rosales", "Soler", "Soler", "Suay",
+            "Talaya", "Tomas", "Vilar");
+
+    private final List<String> last_names = List.of("Sanchis", "Bañuls", "Laenos", "Torres", "Sanchez", "Gyori",
+            "Luz", "Pascual", "Blayimir", "Castello", "Hurtado", "Mourad", "Fernández", "Ríos", "Benavent", "Benavent",
+            "Patricio", "Romance", "Zanon", "Morera");
 
     @Autowired
     UsuarioRepository oUsuarioRepository;
@@ -29,9 +42,12 @@ public class UsuarioService {
     TipousuarioService oTipousuarioService;
 
     @Autowired
+    TipousuarioRepository oTipousuarioRepository;
+
+    @Autowired
     AuthService oAuthService;
 
-    // -- Start Validation -- 
+    // -- Start Validation --
     public void validate(Long id) {
         if (!oUsuarioRepository.existsById(id)) {
             throw new ResourceNotFoundException("id " + id + " not exist");
@@ -39,9 +55,12 @@ public class UsuarioService {
     }
 
     public void validate(UsuarioEntity oUsuarioEntity) {
-        ValidationHelper.validateStringLength(oUsuarioEntity.getNombre(), 2, 50, "campo name de Developer(el campo debe tener longitud de 2 a 50 caracteres)");
-        ValidationHelper.validateStringLength(oUsuarioEntity.getApellido1(), 2, 50, "campo surname de Developer(el campo debe tener longitud de 2 a 50 caracteres)");
-        ValidationHelper.validateStringLength(oUsuarioEntity.getApellido2(), 2, 50, "campo lastname de Developer(el campo debe tener longitud de 2 a 50 caracteres)");
+        ValidationHelper.validateStringLength(oUsuarioEntity.getNombre(), 2, 50,
+                "campo name de Developer(el campo debe tener longitud de 2 a 50 caracteres)");
+        ValidationHelper.validateStringLength(oUsuarioEntity.getApellido1(), 2, 50,
+                "campo surname de Developer(el campo debe tener longitud de 2 a 50 caracteres)");
+        ValidationHelper.validateStringLength(oUsuarioEntity.getApellido2(), 2, 50,
+                "campo lastname de Developer(el campo debe tener longitud de 2 a 50 caracteres)");
         ValidationHelper.validateEmail(oUsuarioEntity.getEmail(), "campo email de Usuario");
         ValidationHelper.validateLogin(oUsuarioEntity.getLogin(), "campo login de Usuario");
         if (oUsuarioRepository.findByLogin(oUsuarioEntity.getLogin())) {
@@ -50,10 +69,10 @@ public class UsuarioService {
         oTipousuarioService.validate(oUsuarioEntity.getTipousuario().getId());
     }
 
-    // -- End Validation -- 
+    // -- End Validation --
     public Long create(UsuarioEntity oNewUsuarioEntity) {
-        //oAuthService.OnlyAdmins();
-        //validate(oNewUsuarioEntity);
+        // oAuthService.OnlyAdmins();
+        // validate(oNewUsuarioEntity);
         oNewUsuarioEntity.setId(0L);
         oNewUsuarioEntity.setPassword(DOGFRIENDLY_DEFAULT_PASSWORD);
         return oUsuarioRepository.save(oNewUsuarioEntity).getId();
@@ -65,14 +84,14 @@ public class UsuarioService {
     }
 
     public Long count() {
-        oAuthService.OnlyAdmins();
+        //oAuthService.OnlyAdmins();
         return oUsuarioRepository.count();
     }
 
     public Long update(UsuarioEntity oUsuarioEntity) {
         validate(oUsuarioEntity.getId());
-        //oAuthService.OnlyAdmins();
-        UsuarioEntity oOldUsuarioEntity=oUsuarioRepository.getReferenceById(oUsuarioEntity.getId());
+        // oAuthService.OnlyAdmins();
+        UsuarioEntity oOldUsuarioEntity = oUsuarioRepository.getReferenceById(oUsuarioEntity.getId());
         oUsuarioEntity.setPassword(oOldUsuarioEntity.getPassword());
         return oUsuarioRepository.save(oUsuarioEntity).getId();
     }
@@ -103,47 +122,65 @@ public class UsuarioService {
     }
 
     public Page<UsuarioEntity> getPage(Pageable oPageable, String strFilter, Long lTipoUsuario) {
-        //oAuthService.OnlyAdmins();
+        // oAuthService.OnlyAdmins();
         ValidationHelper.validateRPP(oPageable.getPageSize());
         Page<UsuarioEntity> oPage = null;
         if (lTipoUsuario == null) {
             if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
                 oPage = oUsuarioRepository.findAll(oPageable);
             } else {
-                oPage = oUsuarioRepository.findByNombreIgnoreCaseContainingOrApellido1IgnoreCaseContainingOrApellido2IgnoreCaseContaining(
-                        strFilter, strFilter, strFilter, oPageable);
+                oPage = oUsuarioRepository
+                        .findByNombreIgnoreCaseContainingOrApellido1IgnoreCaseContainingOrApellido2IgnoreCaseContaining(
+                                strFilter, strFilter, strFilter, oPageable);
             }
         } else {
             if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
                 oPage = oUsuarioRepository.findByTipousuarioId(lTipoUsuario, oPageable);
             } else {
-                oPage = oUsuarioRepository.findByTipousuarioIdAndNombreIgnoreCaseContainingOrApellido1IgnoreCaseContainingOrApellido2IgnoreCaseContaining(
-                        lTipoUsuario, strFilter, strFilter, strFilter, oPageable);
+                oPage = oUsuarioRepository
+                        .findByTipousuarioIdAndNombreIgnoreCaseContainingOrApellido1IgnoreCaseContainingOrApellido2IgnoreCaseContaining(
+                                lTipoUsuario, strFilter, strFilter, strFilter, oPageable);
             }
         }
         return oPage;
     }
 
+    private UsuarioEntity generateUsuario() {
+        UsuarioEntity oUsuarioEntity = new UsuarioEntity();
 
-  
+        oUsuarioEntity.setNombre(names.get(RandomHelper.getRandomInt(0, names.size() - 1)));
+        oUsuarioEntity.setApellido1(surnames.get(RandomHelper.getRandomInt(0, names.size() - 1)));
+        oUsuarioEntity.setApellido2(last_names.get(RandomHelper.getRandomInt(0, names.size() - 1)));
+        oUsuarioEntity.setFechaNacimiento(RandomHelper.getRadomDateTime());
+
+        oUsuarioEntity.setLogin((oUsuarioEntity.getNombre().toLowerCase()
+                + oUsuarioEntity.getApellido1().toLowerCase()).replaceAll("\\s", ""));
+        oUsuarioEntity.setEmail(oUsuarioEntity.getLogin() + "@dogfriendly.net");
+
+        oUsuarioEntity.setPassword(DOGFRIENDLY_DEFAULT_PASSWORD);
+
+        int totalUsertypes = (int) oTipousuarioRepository.count();
+        int randomUserTypeId = RandomHelper.getRandomInt(1, totalUsertypes);
+        oTipousuarioRepository.findById((long) randomUserTypeId)
+                .ifPresent(oUsuarioEntity::setTipousuario);
+
+        return oUsuarioEntity;
+    }
 
     
+    public UsuarioEntity generateOne() {
+        //oAuthService.OnlyAdmins();
+        return oUsuarioRepository.save(generateUsuario());
+    }
 
-  
-    
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
+    public Long generateSome(Long amount) {
+        //oAuthService.OnlyAdmins();
+        List<UsuarioEntity> usuarioToSave = new ArrayList<>();
+        for (int i = 0; i < amount; i++) {
+            usuarioToSave.add(generateUsuario());
+        }
+        oUsuarioRepository.saveAll(usuarioToSave);
+        return oUsuarioRepository.count();
+    }
 
 }
