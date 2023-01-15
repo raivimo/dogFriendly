@@ -1,7 +1,7 @@
 package com.raimon.dogfriendly.entity;
 
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,19 +23,14 @@ public class FacturaEntity  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private LocalDateTime fecha;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy" )
+    private LocalDate fecha;
     private int iva;
     private boolean pagado;
 
-  
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_paseo")
     private PaseoEntity paseo;
-
-
-
-
 
     public Long getId() {
         return id;
@@ -45,11 +40,11 @@ public class FacturaEntity  {
         this.id = id;
     }
 
-    public LocalDateTime getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDateTime fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
@@ -69,12 +64,15 @@ public class FacturaEntity  {
         this.pagado = pagado;
     }
 
+    public PaseoEntity getPaseo() {
+        return paseo;
+    }
 
-
-    public void setPaseos(PaseoEntity paseo) {
+    public void setPaseo(PaseoEntity paseo) {
         this.paseo = paseo;
     }
 
+    
 
 
 
