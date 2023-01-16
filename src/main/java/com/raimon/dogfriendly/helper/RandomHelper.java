@@ -46,7 +46,7 @@ public class RandomHelper {
 
     public static Date getRadomDate() {
         GregorianCalendar gc = new GregorianCalendar();
-        int year = getRandomInt(2010, 2019);
+        int year = getRandomInt(2010, 2023);
         gc.set(gc.YEAR, year);
         int dayOfYear = getRandomInt(1, gc.getActualMaximum(gc.DAY_OF_YEAR));
         gc.set(gc.DAY_OF_YEAR, dayOfYear);

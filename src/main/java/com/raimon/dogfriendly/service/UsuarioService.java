@@ -97,7 +97,7 @@ public class UsuarioService {
     }
 
     public Long delete(Long id) {
-        oAuthService.OnlyAdmins();
+        //oAuthService.OnlyAdmins();
         validate(id);
         oUsuarioRepository.deleteById(id);
         if (oUsuarioRepository.existsById(id)) {
@@ -151,7 +151,8 @@ public class UsuarioService {
         oUsuarioEntity.setNombre(names.get(RandomHelper.getRandomInt(0, names.size() - 1)));
         oUsuarioEntity.setApellido1(surnames.get(RandomHelper.getRandomInt(0, names.size() - 1)));
         oUsuarioEntity.setApellido2(last_names.get(RandomHelper.getRandomInt(0, names.size() - 1)));
-        oUsuarioEntity.setFechaNacimiento(RandomHelper.getRadomDateTime());
+
+        oUsuarioEntity.setFechaNacimiento(RandomHelper.getRadomDate());
 
         oUsuarioEntity.setLogin((oUsuarioEntity.getNombre().toLowerCase()
                 + oUsuarioEntity.getApellido1().toLowerCase()).replaceAll("\\s", ""));
