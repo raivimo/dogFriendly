@@ -70,6 +70,12 @@ public class UsuarioService {
     }
 
     // -- End Validation --
+
+    public UsuarioEntity get(Long id) {
+        return oUsuarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario with id: " + id + " not found"));
+    }
+
     public Long create(UsuarioEntity oNewUsuarioEntity) {
         // oAuthService.OnlyAdmins();
         // validate(oNewUsuarioEntity);
@@ -78,13 +84,8 @@ public class UsuarioService {
         return oUsuarioRepository.save(oNewUsuarioEntity).getId();
     }
 
-    public UsuarioEntity get(Long id) {
-        return oUsuarioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario with id: " + id + " not found"));
-    }
-
     public Long count() {
-        //oAuthService.OnlyAdmins();
+        // oAuthService.OnlyAdmins();
         return oUsuarioRepository.count();
     }
 
@@ -97,7 +98,7 @@ public class UsuarioService {
     }
 
     public Long delete(Long id) {
-        //oAuthService.OnlyAdmins();
+        // oAuthService.OnlyAdmins();
         validate(id);
         oUsuarioRepository.deleteById(id);
         if (oUsuarioRepository.existsById(id)) {
@@ -168,14 +169,13 @@ public class UsuarioService {
         return oUsuarioEntity;
     }
 
-    
     public UsuarioEntity generateOne() {
-        //oAuthService.OnlyAdmins();
+        // oAuthService.OnlyAdmins();
         return oUsuarioRepository.save(generateUsuario());
     }
 
     public Long generateSome(Long amount) {
-        //oAuthService.OnlyAdmins();
+        // oAuthService.OnlyAdmins();
         List<UsuarioEntity> usuarioToSave = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             usuarioToSave.add(generateUsuario());
