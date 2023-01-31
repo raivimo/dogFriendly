@@ -54,7 +54,7 @@ public class TipousuarioController {
     }
 
     
-    @GetMapping("")
+   @GetMapping("")
     public ResponseEntity<Page<TipousuarioEntity>> getPage(
             @ParameterObject @PageableDefault(page = 0, size = 5, direction = Sort.Direction.DESC) Pageable oPageable,
             @RequestParam(name = "filter", required = false) String strFilter,

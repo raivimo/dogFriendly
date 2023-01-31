@@ -1,11 +1,14 @@
 package com.raimon.dogfriendly.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.raimon.dogfriendly.entity.TipopaseoEntity;
 import com.raimon.dogfriendly.exception.ResourceNotFoundException;
 import com.raimon.dogfriendly.exception.ResourceNotModifiedException;
+import com.raimon.dogfriendly.helper.ValidationHelper;
 import com.raimon.dogfriendly.repository.TipopaseoRepository;
 
 @Service
@@ -34,7 +37,7 @@ public class TipopaseoService {
     }
 
     public Long create(TipopaseoEntity oNewTipopaseoEntity) {
-        oAuthService.OnlyAdmins();
+        /* oAuthService.OnlyAdmins(); */
         //validate(oNewUsuarioEntity);
         oNewTipopaseoEntity.setId(0L);
         return oTipopaseoRepository.save(oNewTipopaseoEntity).getId();
@@ -49,7 +52,7 @@ public class TipopaseoService {
     }
 
     public Long delete(Long id) {
-        oAuthService.OnlyAdmins();
+        /* oAuthService.OnlyAdmins(); */
         validate(id);
         oTipopaseoRepository.deleteById(id);
         if (oTipopaseoRepository.existsById(id)) {
@@ -58,6 +61,19 @@ public class TipopaseoService {
             return id;
         }
     }
+
+    public Page<TipopaseoEntity> getPage(Pageable oPageable, String strFilter) {
+        // oAuthService.OnlyAdmins();
+        ValidationHelper.validateRPP(oPageable.getPageSize());
+        Page<TipopaseoEntity> oPage = null;
+            if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                oPage = oTipopaseoRepository.findAll(oPageable);
+            } else {
+                oPage = oTipopaseoRepository
+                        .findByNombre(strFilter, oPageable);
+            }
+            return oPage;
+        }
 
 
 

@@ -1,11 +1,14 @@
 package com.raimon.dogfriendly.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.raimon.dogfriendly.entity.PaseoEntity;
 import com.raimon.dogfriendly.exception.ResourceNotFoundException;
 import com.raimon.dogfriendly.exception.ResourceNotModifiedException;
+import com.raimon.dogfriendly.helper.ValidationHelper;
 import com.raimon.dogfriendly.repository.PaseoRepository;
 
 @Service
@@ -35,8 +38,8 @@ public class PaseoService {
     }
 
     public Long create(PaseoEntity oNewPaseoEntity) {
-        oAuthService.OnlyAdmins();
-        //validate(oNewUsuarioEntity);
+    /*     oAuthService.OnlyAdmins();
+        validate(oNewPaseoEntity); */
         oNewPaseoEntity.setId(0L);
         return oPaseoRepository.save(oNewPaseoEntity).getId();
     }
@@ -50,7 +53,7 @@ public class PaseoService {
     }
 
     public Long delete(Long id) {
-        oAuthService.OnlyAdmins();
+        /* oAuthService.OnlyAdmins(); */
         validate(id);
         oPaseoRepository.deleteById(id);
         if (oPaseoRepository.existsById(id)) {
@@ -58,6 +61,19 @@ public class PaseoService {
         } else {
             return id;
         }
+    }
+
+    public Page<PaseoEntity> getPage(Pageable oPageable, String strFilter) {
+        // oAuthService.OnlyAdmins();
+        ValidationHelper.validateRPP(oPageable.getPageSize());
+        Page<PaseoEntity> oPage = null;
+        if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+            oPage = oPaseoRepository.findAll(oPageable);
+        } else {
+            oPage = oPaseoRepository
+                    .findByLugar(strFilter, oPageable);
+        }
+        return oPage;
     }
 
 
