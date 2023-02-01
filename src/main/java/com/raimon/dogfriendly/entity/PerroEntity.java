@@ -24,7 +24,7 @@ public class PerroEntity {
 
     private String nombre;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate fechaNacimiento;
 
     private int genero;
@@ -36,7 +36,7 @@ public class PerroEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_raza")
-    private RazaEntity razas;
+    private RazaEntity raza;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_usuario")
@@ -122,12 +122,12 @@ public class PerroEntity {
         this.usuario = usuario;
     }
 
-    public RazaEntity getRazas() {
-        return razas;
+    public RazaEntity getRaza() {
+        return raza;
     }
 
-    public void setRazas(RazaEntity razas) {
-        this.razas = razas;
+    public void setRazas(RazaEntity raza) {
+        this.raza = raza;
     }
 
 }

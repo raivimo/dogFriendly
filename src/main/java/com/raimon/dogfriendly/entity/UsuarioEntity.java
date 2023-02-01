@@ -29,7 +29,7 @@ public class UsuarioEntity  {
     private String apellido2;
     private String email;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date fechaNacimiento;
 
     private String login;
