@@ -4,6 +4,8 @@ package com.raimon.dogfriendly.entity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.time.LocalDate;
+
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,8 +29,8 @@ public class PaseoEntity  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date fecha;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate fecha;
 
     private String lugar;
     private double precio;
@@ -71,12 +73,12 @@ public class PaseoEntity  {
     }
 
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 

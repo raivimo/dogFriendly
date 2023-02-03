@@ -19,7 +19,6 @@ public class PaseoService {
     @Autowired
     AuthService oAuthService;
 
-
     public void validate(Long id) {
         if (!oPaseoRepository.existsById(id)) {
             throw new ResourceNotFoundException("id " + id + " not exist");
@@ -31,19 +30,19 @@ public class PaseoService {
         return oPaseoRepository.count();
     }
 
-
     public PaseoEntity get(Long id) {
         return oPaseoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Team with id: " + id + " not found"));
     }
 
     public Long create(PaseoEntity oNewPaseoEntity) {
-    /*     oAuthService.OnlyAdmins();
-        validate(oNewPaseoEntity); */
+        /*
+         * oAuthService.OnlyAdmins();
+         * validate(oNewPaseoEntity);
+         */
         oNewPaseoEntity.setId(0L);
         return oPaseoRepository.save(oNewPaseoEntity).getId();
     }
-
 
     public Long update(PaseoEntity oPaseoEntity) {
         validate(oPaseoEntity.getId());
@@ -63,26 +62,89 @@ public class PaseoService {
         }
     }
 
-    public Page<PaseoEntity> getPage(Pageable oPageable, String strFilter) {
-        // oAuthService.OnlyAdmins();
+    public Page<PaseoEntity> getPage(Pageable oPageable, String strFilter, Long id_tipopaseo, Long id_usuario, Long id_perro) {
+        /* oAuthService.OnlyAdmins(); */
         ValidationHelper.validateRPP(oPageable.getPageSize());
         Page<PaseoEntity> oPage = null;
-        if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
-            oPage = oPaseoRepository.findAll(oPageable);
-        } else {
-            oPage = oPaseoRepository
-                    .findByLugar(strFilter, oPageable);
+
+        if (id_tipopaseo == null && id_usuario == null && id_perro != null) {
+            if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                oPage = oPaseoRepository.findByPerroId(id_perro, oPageable);
+            }
+            oPage = oPaseoRepository.findByPerroIdAndFechaContainingOrLugarContaining(id_perro, strFilter,
+                    strFilter, oPageable);
         }
-        return oPage;
+        // Pasando id_emisor y id_receptor
+        if (id_tipopaseo == null && id_usuario != null && id_perro != null) {
+            if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                oPage = oPaseoRepository.findByUsuarioIdAndPerroId(id_perro,
+                        id_usuario, oPageable);
+            }
+            oPage = oPaseoRepository
+                    .findByUsuarioIdAndPerroIdAndFechaContainingOrLugarContaining(id_usuario, id_perro, strFilter,
+                            strFilter, oPageable);
+        }
+            // Pasando id_emisor, id_receptor y id_tipocuenta
+            if (id_tipopaseo != null && id_usuario != null && id_perro != null) {
+                if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                    oPage = oPaseoRepository.findByTipopaseoIdAndUsuarioIdAndPerroId(
+                            id_tipopaseo, id_usuario, id_perro, oPageable);
+                }
+                oPage = oPaseoRepository
+                        .findByTipopaseoIdAndUsuarioIdAndPerroIdAndFechaContainingOrLugarContaining(
+                                id_tipopaseo, id_usuario, id_perro, strFilter, strFilter, oPageable);
+            }
+            // Pasando solo id_tipopaseo
+            if (id_tipopaseo != null && id_usuario == null && id_perro == null) {
+                if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                    oPage = oPaseoRepository.findByTipopaseoId(id_tipopaseo, oPageable);
+                }
+                oPage = oPaseoRepository.findByTipopaseoIdAndFechaContainingOrLugarContaining(id_tipopaseo,
+                        strFilter, strFilter, oPageable);
+            }
+
+            // Pasando id_tipopaseo y id_usuario
+            if (id_tipopaseo != null && id_usuario != null && id_perro == null) {
+                if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                    oPage = oPaseoRepository.findByTipopaseoIdAndUsuarioId(id_tipopaseo,
+                            id_usuario, oPageable);
+                }
+                oPage = oPaseoRepository.findByTipopaseoIdAndUsuarioIdAndFechaOrLugarContaining(
+                        id_tipopaseo, id_usuario, strFilter, strFilter, oPageable);
+            }
+
+            // Pasando solo id_usuario
+            if (id_tipopaseo == null && id_usuario != null && id_perro == null) {
+                if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                    oPage = oPaseoRepository.findByUsuarioId(id_usuario, oPageable);
+                }
+                oPage = oPaseoRepository.findByUsuarioIdAndFechaOrLugarContaining(id_usuario,
+                        strFilter, strFilter, oPageable);
+            }
+
+            // Pasando id_usuario y id_perro
+            if (id_tipopaseo == null && id_usuario != null && id_perro != null) {
+
+                if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                    oPage = oPaseoRepository.findByUsuarioIdAndPerroId(id_usuario,
+                            id_perro, oPageable);
+                }
+                oPage = oPaseoRepository
+                        .findByUsuarioIdAndPerroIdAndFechaOrLugarContaining(id_usuario,
+                                id_perro, strFilter, strFilter, oPageable);
+            }
+
+            // Pasando nada
+            if (id_tipopaseo == null && id_usuario == null && id_perro == null) {
+
+                if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                    oPage = oPaseoRepository.findAll(oPageable);
+                }
+                oPage = oPaseoRepository.findByFechaOrLugarContaining(strFilter, strFilter, oPageable);
+
+            }
+            return oPage;
+        }
     }
 
 
-
-
-
-
-
-
-
-    
-}

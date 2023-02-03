@@ -1,7 +1,8 @@
 package com.raimon.dogfriendly.entity;
 
-
 import java.util.Date;
+import java.time.LocalDate;
+
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,7 +31,7 @@ public class UsuarioEntity  {
     private String email;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date fechaNacimiento;
+    private LocalDate fechaNacimiento;
 
     private String login;
     private String password;
@@ -71,11 +72,11 @@ public class UsuarioEntity  {
         this.apellido2 = apellido2;
     }
     
-    public Date getFechaNacimiento() {
+    public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 
