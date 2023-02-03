@@ -63,6 +63,17 @@ public class FacturaController {
         return new ResponseEntity<Page<FacturaEntity>>(oFacturaService.getPage(oPageable, strFilter, lPaseo), HttpStatus.OK);
     }
 
+    @PostMapping("/generate")
+    public ResponseEntity<FacturaEntity> generateOne() {
+        return new ResponseEntity<>(oFacturaService.generateOne(), HttpStatus.OK);
+    }
+
+    @PostMapping("/generate/{amount}")
+    public ResponseEntity<Long> generateSome(@PathVariable Long amount) {
+        return new ResponseEntity<>(oFacturaService.generateSome(amount), HttpStatus.OK);
+    }
+
+
 
 
 

@@ -60,16 +60,15 @@ public class TipopaseoController {
         return new ResponseEntity<Page<TipopaseoEntity>>(oTipopaseoService.getPage(oPageable, strFilter), HttpStatus.OK);
     }
 
+    @PostMapping("/generate")
+    public ResponseEntity<TipopaseoEntity> generateOne() {
+        return new ResponseEntity<>(oTipopaseoService.generateOne(), HttpStatus.OK);
+    }
 
-
-
-
-
-
-
-
-
-
+    @PostMapping("/generate/{amount}")
+    public ResponseEntity<Long> generateSome(@PathVariable Long amount) {
+        return new ResponseEntity<>(oTipopaseoService.generateSome(amount), HttpStatus.OK);
+    }
 
 
 

@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "tipousuario")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class TipousuarioEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -47,6 +47,11 @@ public class TipousuarioEntity {
 
     public int getUsuarios() {
         return usuarios.size();
+    }
+
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
 }

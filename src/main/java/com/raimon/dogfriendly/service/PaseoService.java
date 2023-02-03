@@ -1,5 +1,8 @@
 package com.raimon.dogfriendly.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,13 +11,30 @@ import org.springframework.stereotype.Service;
 import com.raimon.dogfriendly.entity.PaseoEntity;
 import com.raimon.dogfriendly.exception.ResourceNotFoundException;
 import com.raimon.dogfriendly.exception.ResourceNotModifiedException;
+import com.raimon.dogfriendly.helper.RandomHelper;
 import com.raimon.dogfriendly.helper.ValidationHelper;
 import com.raimon.dogfriendly.repository.PaseoRepository;
+import com.raimon.dogfriendly.repository.PerroRepository;
+import com.raimon.dogfriendly.repository.TipopaseoRepository;
+import com.raimon.dogfriendly.repository.UsuarioRepository;
 
 @Service
 public class PaseoService {
+
+    private final List<String> nombreLugar = List.of("Parque de Marxalenes", "Ciudad de las Artes y las Ciencias",
+            "Joaquin Sorolla", "Malvarrosa", "Patacona", "El rio", "Parque del Oeste");
+
     @Autowired
     PaseoRepository oPaseoRepository;
+
+    @Autowired
+    TipopaseoRepository oTipopaseoRepository;
+
+    @Autowired
+    UsuarioRepository oUsuarioRepository;
+
+    @Autowired
+    PerroRepository oPerroRepository;
 
     @Autowired
     AuthService oAuthService;
@@ -62,7 +82,8 @@ public class PaseoService {
         }
     }
 
-    public Page<PaseoEntity> getPage(Pageable oPageable, String strFilter, Long id_tipopaseo, Long id_usuario, Long id_perro) {
+    public Page<PaseoEntity> getPage(Pageable oPageable, String strFilter, Long id_tipopaseo, Long id_usuario,
+            Long id_perro) {
         /* oAuthService.OnlyAdmins(); */
         ValidationHelper.validateRPP(oPageable.getPageSize());
         Page<PaseoEntity> oPage = null;
@@ -74,7 +95,6 @@ public class PaseoService {
             oPage = oPaseoRepository.findByPerroIdAndFechaContainingOrLugarContaining(id_perro, strFilter,
                     strFilter, oPageable);
         }
-        // Pasando id_emisor y id_receptor
         if (id_tipopaseo == null && id_usuario != null && id_perro != null) {
             if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
                 oPage = oPaseoRepository.findByUsuarioIdAndPerroId(id_perro,
@@ -84,67 +104,95 @@ public class PaseoService {
                     .findByUsuarioIdAndPerroIdAndFechaContainingOrLugarContaining(id_usuario, id_perro, strFilter,
                             strFilter, oPageable);
         }
-            // Pasando id_emisor, id_receptor y id_tipocuenta
-            if (id_tipopaseo != null && id_usuario != null && id_perro != null) {
-                if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
-                    oPage = oPaseoRepository.findByTipopaseoIdAndUsuarioIdAndPerroId(
-                            id_tipopaseo, id_usuario, id_perro, oPageable);
-                }
-                oPage = oPaseoRepository
-                        .findByTipopaseoIdAndUsuarioIdAndPerroIdAndFechaContainingOrLugarContaining(
-                                id_tipopaseo, id_usuario, id_perro, strFilter, strFilter, oPageable);
+        if (id_tipopaseo != null && id_usuario != null && id_perro != null) {
+            if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                oPage = oPaseoRepository.findByTipopaseoIdAndUsuarioIdAndPerroId(
+                        id_tipopaseo, id_usuario, id_perro, oPageable);
             }
-            // Pasando solo id_tipopaseo
-            if (id_tipopaseo != null && id_usuario == null && id_perro == null) {
-                if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
-                    oPage = oPaseoRepository.findByTipopaseoId(id_tipopaseo, oPageable);
-                }
-                oPage = oPaseoRepository.findByTipopaseoIdAndFechaContainingOrLugarContaining(id_tipopaseo,
-                        strFilter, strFilter, oPageable);
-            }
-
-            // Pasando id_tipopaseo y id_usuario
-            if (id_tipopaseo != null && id_usuario != null && id_perro == null) {
-                if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
-                    oPage = oPaseoRepository.findByTipopaseoIdAndUsuarioId(id_tipopaseo,
-                            id_usuario, oPageable);
-                }
-                oPage = oPaseoRepository.findByTipopaseoIdAndUsuarioIdAndFechaOrLugarContaining(
-                        id_tipopaseo, id_usuario, strFilter, strFilter, oPageable);
-            }
-
-            // Pasando solo id_usuario
-            if (id_tipopaseo == null && id_usuario != null && id_perro == null) {
-                if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
-                    oPage = oPaseoRepository.findByUsuarioId(id_usuario, oPageable);
-                }
-                oPage = oPaseoRepository.findByUsuarioIdAndFechaOrLugarContaining(id_usuario,
-                        strFilter, strFilter, oPageable);
-            }
-
-            // Pasando id_usuario y id_perro
-            if (id_tipopaseo == null && id_usuario != null && id_perro != null) {
-
-                if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
-                    oPage = oPaseoRepository.findByUsuarioIdAndPerroId(id_usuario,
-                            id_perro, oPageable);
-                }
-                oPage = oPaseoRepository
-                        .findByUsuarioIdAndPerroIdAndFechaOrLugarContaining(id_usuario,
-                                id_perro, strFilter, strFilter, oPageable);
-            }
-
-            // Pasando nada
-            if (id_tipopaseo == null && id_usuario == null && id_perro == null) {
-
-                if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
-                    oPage = oPaseoRepository.findAll(oPageable);
-                }
-                oPage = oPaseoRepository.findByFechaOrLugarContaining(strFilter, strFilter, oPageable);
-
-            }
-            return oPage;
+            oPage = oPaseoRepository
+                    .findByTipopaseoIdAndUsuarioIdAndPerroIdAndFechaContainingOrLugarContaining(
+                            id_tipopaseo, id_usuario, id_perro, strFilter, strFilter, oPageable);
         }
+        if (id_tipopaseo != null && id_usuario == null && id_perro == null) {
+            if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                oPage = oPaseoRepository.findByTipopaseoId(id_tipopaseo, oPageable);
+            }
+            oPage = oPaseoRepository.findByTipopaseoIdAndFechaContainingOrLugarContaining(id_tipopaseo,
+                    strFilter, strFilter, oPageable);
+        }
+
+        // Pasando id_tipopaseo y id_usuario
+        if (id_tipopaseo != null && id_usuario != null && id_perro == null) {
+            if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                oPage = oPaseoRepository.findByTipopaseoIdAndUsuarioId(id_tipopaseo,
+                        id_usuario, oPageable);
+            }
+            oPage = oPaseoRepository.findByTipopaseoIdAndUsuarioIdAndFechaOrLugarContaining(
+                    id_tipopaseo, id_usuario, strFilter, strFilter, oPageable);
+        }
+
+        // Pasando solo id_usuario
+        if (id_tipopaseo == null && id_usuario != null && id_perro == null) {
+            if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                oPage = oPaseoRepository.findByUsuarioId(id_usuario, oPageable);
+            }
+            oPage = oPaseoRepository.findByUsuarioIdAndFechaOrLugarContaining(id_usuario,
+                    strFilter, strFilter, oPageable);
+        }
+        // Pasando id_usuario y id_perro
+        if (id_tipopaseo == null && id_usuario != null && id_perro != null) {
+            if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                oPage = oPaseoRepository.findByUsuarioIdAndPerroId(id_usuario,
+                        id_perro, oPageable);
+            }
+            oPage = oPaseoRepository
+                    .findByUsuarioIdAndPerroIdAndFechaOrLugarContaining(id_usuario,
+                            id_perro, strFilter, strFilter, oPageable);
+        }
+        // Pasando nada
+        if (id_tipopaseo == null && id_usuario == null && id_perro == null) {
+            if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                oPage = oPaseoRepository.findAll(oPageable);
+            }
+            oPage = oPaseoRepository.findByFechaOrLugarContaining(strFilter, strFilter, oPageable);
+        }
+        return oPage;
     }
 
+    private PaseoEntity generatePaseo() {
+            PaseoEntity oPaseoEntity = new PaseoEntity();
+            oPaseoEntity.setLugar(nombreLugar.get(RandomHelper.getRandomInt(0, nombreLugar.size() - 1)));
+            oPaseoEntity.setFecha((RandomHelper.getRandomLocalDate()));
+            oPaseoEntity.setPrecio(RandomHelper.getRandomInt(5, 25));
+      
+            int totalTipopaseo = (int) oTipopaseoRepository.count();
+            int randomTipoPaseoId = RandomHelper.getRandomInt(1, totalTipopaseo);
+            oTipopaseoRepository.findById((long) randomTipoPaseoId).ifPresent(oPaseoEntity::setTipopaseo);
+    
+            int totalUsuario = (int) oUsuarioRepository.count();
+            int randomUsuarioId = RandomHelper.getRandomInt(1, totalUsuario);
+            oUsuarioRepository.findById((long) randomUsuarioId).ifPresent(oPaseoEntity::setUsuario);
 
+            int totalPerro = (int) oPerroRepository.count();
+            int randomPerroId = RandomHelper.getRandomInt(1, totalPerro);
+            oPerroRepository.findById((long) randomPerroId).ifPresent(oPaseoEntity::setPerro);
+
+            return oPaseoEntity;
+        }
+
+    public PaseoEntity generateOne() {
+        // oAuthService.OnlyAdmins();
+        return oPaseoRepository.save(generatePaseo());
+    }
+
+    public Long generateSome(Long amount) {
+        // oAuthService.OnlyAdmins();
+        List<PaseoEntity> paseoToSave = new ArrayList<>();
+        for (int i = 0; i < amount; i++) {
+            paseoToSave.add(generatePaseo());
+        }
+        oPaseoRepository.saveAll(paseoToSave);
+        return oPaseoRepository.count();
+    }
+
+}

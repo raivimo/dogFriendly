@@ -61,4 +61,14 @@ public class TipousuarioController {
             @RequestParam(name = "tipousuario", required = false) Long lTipoUsuario) {
         return new ResponseEntity<Page<TipousuarioEntity>>(oTipousuarioService.getPage(oPageable, strFilter), HttpStatus.OK);
     }
+
+    @PostMapping("/generate")
+    public ResponseEntity<TipousuarioEntity> generateOne() {
+        return new ResponseEntity<>(oTipousuarioService.generateOne(), HttpStatus.OK);
+    }
+
+    @PostMapping("/generate/{amount}")
+    public ResponseEntity<Long> generateSome(@PathVariable Long amount) {
+        return new ResponseEntity<>(oTipousuarioService.generateSome(amount), HttpStatus.OK);
+    }
 }

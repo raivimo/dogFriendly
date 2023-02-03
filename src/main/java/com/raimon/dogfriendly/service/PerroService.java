@@ -1,5 +1,6 @@
 package com.raimon.dogfriendly.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,23 @@ import com.raimon.dogfriendly.exception.ResourceNotModifiedException;
 import com.raimon.dogfriendly.helper.RandomHelper;
 import com.raimon.dogfriendly.helper.ValidationHelper;
 import com.raimon.dogfriendly.repository.PerroRepository;
+import com.raimon.dogfriendly.repository.RazaRepository;
+import com.raimon.dogfriendly.repository.UsuarioRepository;
 
 @Service
 public class PerroService {
 
+    private final List<String> nombreMascota = List.of("Thor", "Rocco","Baloo","Nana","Chucky","Potter","Rei","Dama","Hulk", "Jack","Uggie", "Dante", "Conan", "Luna",
+    "Akira", "Molly", "Thanos", "Beethoven", "Frank", "Golfo", "Dumbo", "Merlín", "Vader", "Penny", "Rocky", "Brian", "Verdell", "Reina", "Dino", "Troya" );
+
     @Autowired
     PerroRepository oPerroRepository;
+
+    @Autowired
+    UsuarioRepository oUsuarioRepository;
+
+    @Autowired
+    RazaRepository oRazaRepository;
 
     @Autowired
     AuthService oAuthService;
@@ -84,7 +96,6 @@ public class PerroService {
         // oAuthService.OnlyAdmins();
         ValidationHelper.validateRPP(oPageable.getPageSize());
         Page<PerroEntity> oPage = null;
-
         // Pasar id_usuario
         if (id_raza == null && id_usuario != null) {
             if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
@@ -117,6 +128,42 @@ public class PerroService {
             oPage = oPerroRepository.findByNombreIgnoreCaseContaining(strFilter, oPageable);
         }
         return oPage;
+    }
+
+    private PerroEntity generatePerro() {
+        PerroEntity oPerroEntity = new PerroEntity();
+
+        oPerroEntity.setNombre(nombreMascota.get(RandomHelper.getRandomInt(0, nombreMascota.size() - 1)));
+        oPerroEntity.setFechaNacimiento(RandomHelper.getRandomLocalDate());
+        oPerroEntity.setGenero(RandomHelper.getRandomInt(0, 1));
+        oPerroEntity.setPeso(RandomHelper.getRandomInt2(3, 45));
+        oPerroEntity.setSociable(RandomHelper.getRandomBoolean());
+        oPerroEntity.setPuedeIrSuelto(RandomHelper.getRandomBoolean());
+        oPerroEntity.setEsJugueton(RandomHelper.getRandomBoolean());
+
+        int totalUsuario = (int) oUsuarioRepository.count();
+        int randomUsuarioId = RandomHelper.getRandomInt(1, totalUsuario);
+        oUsuarioRepository.findById((long) randomUsuarioId).ifPresent(oPerroEntity::setUsuario);
+
+        int totalRaza = (int) oRazaRepository.count();
+        int randomRazaId = RandomHelper.getRandomInt(1, totalRaza);
+        oRazaRepository.findById((long) randomRazaId).ifPresent(oPerroEntity::setRazas);
+        return oPerroEntity;
+    }
+
+    public PerroEntity generateOne() {
+        // oAuthService.OnlyAdmins();
+        return oPerroRepository.save(generatePerro());
+    }
+
+    public Long generateSome(Long amount) {
+        // oAuthService.OnlyAdmins();
+        List<PerroEntity> perroToSave = new ArrayList<>();
+        for (int i = 0; i < amount; i++) {
+            perroToSave.add(generatePerro());
+        }
+        oPerroRepository.saveAll(perroToSave);
+        return oPerroRepository.count();
     }
 
 }

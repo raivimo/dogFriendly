@@ -152,13 +152,10 @@ public class UsuarioService {
         oUsuarioEntity.setNombre(names.get(RandomHelper.getRandomInt(0, names.size() - 1)));
         oUsuarioEntity.setApellido1(surnames.get(RandomHelper.getRandomInt(0, names.size() - 1)));
         oUsuarioEntity.setApellido2(last_names.get(RandomHelper.getRandomInt(0, names.size() - 1)));
-
-        oUsuarioEntity.setFechaNacimiento(RandomHelper.getRadomDate());
-
+        oUsuarioEntity.setFechaNacimiento(RandomHelper.getRandomLocalDate());
         oUsuarioEntity.setLogin((oUsuarioEntity.getNombre().toLowerCase()
                 + oUsuarioEntity.getApellido1().toLowerCase()).replaceAll("\\s", ""));
         oUsuarioEntity.setEmail(oUsuarioEntity.getLogin() + "@dogfriendly.net");
-
         oUsuarioEntity.setPassword(DOGFRIENDLY_DEFAULT_PASSWORD);
 
         int totalUsertypes = (int) oTipousuarioRepository.count();
@@ -183,5 +180,6 @@ public class UsuarioService {
         oUsuarioRepository.saveAll(usuarioToSave);
         return oUsuarioRepository.count();
     }
+
 
 }

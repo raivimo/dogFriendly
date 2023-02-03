@@ -64,4 +64,15 @@ public class PaseoController {
         return new ResponseEntity<Page<PaseoEntity>>(oPaseoService.getPage(oPageable, strFilter,  lTipopaseo, lUsuario, lPerro), HttpStatus.OK);
     }
 
+    @PostMapping("/generate")
+    public ResponseEntity<PaseoEntity> generateOne() {
+        return new ResponseEntity<>(oPaseoService.generateOne(), HttpStatus.OK);
+    }
+
+    @PostMapping("/generate/{amount}")
+    public ResponseEntity<Long> generateSome(@PathVariable Long amount) {
+        return new ResponseEntity<>(oPaseoService.generateSome(amount), HttpStatus.OK);
+    }
+
+
 }

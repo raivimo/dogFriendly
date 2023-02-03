@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.raimon.dogfriendly.entity.FacturaEntity;
 import com.raimon.dogfriendly.entity.RazaEntity;
 import com.raimon.dogfriendly.service.RazaService;
 
@@ -61,6 +62,17 @@ public class RazaController {
             @RequestParam(name = "tipousuario", required = false) Long lTipoUsuario) {
         return new ResponseEntity<Page<RazaEntity>>(oRazaService.getPage(oPageable, strFilter), HttpStatus.OK);
     }
+
+    @PostMapping("/generate")
+    public ResponseEntity<RazaEntity> generateOne() {
+        return new ResponseEntity<>(oRazaService.generateOne(), HttpStatus.OK);
+    }
+
+    @PostMapping("/generate/{amount}")
+    public ResponseEntity<Long> generateSome(@PathVariable Long amount) {
+        return new ResponseEntity<>(oRazaService.generateSome(amount), HttpStatus.OK);
+    }
+
 
 
 

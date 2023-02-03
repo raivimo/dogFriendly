@@ -64,15 +64,13 @@ public class PerroController {
     }
 
 
-   
-
-/*     @PostMapping("/generate")
+    @PostMapping("/generate")
     public ResponseEntity<PerroEntity> generateOne() {
-        return new ResponseEntity<>(oPerroService.generateOne(), HttpStatus.OK);a
+        return new ResponseEntity<>(oPerroService.generateOne(), HttpStatus.OK);
     }
 
     @PostMapping("/generate/{amount}")
     public ResponseEntity<Long> generateSome(@PathVariable Long amount) {
         return new ResponseEntity<>(oPerroService.generateSome(amount), HttpStatus.OK);
-    } */
+    }
 }

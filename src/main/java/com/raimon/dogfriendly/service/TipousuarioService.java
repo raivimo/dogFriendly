@@ -1,5 +1,6 @@
 package com.raimon.dogfriendly.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import com.raimon.dogfriendly.repository.TipousuarioRepository;
 @Service
 public class TipousuarioService {
 
+    private final List<String> TiposDeUsuario = List.of("Administrador", "Usuario", "Invitado", "Paseador", "Voluntario");
+
     @Autowired
     TipousuarioRepository oTipousuarioRepository;
 
@@ -32,9 +35,9 @@ public class TipousuarioService {
         return oTipousuarioRepository.getReferenceById(id);
     }
 
-    public Long create(TipousuarioEntity oNewTipoUsuarioEntity) {
+    public Long create(TipousuarioEntity oNewTipoTipousuarioEntity) {
         // oAuthService.OnlyAdmins();
-        return oTipousuarioRepository.save(oNewTipoUsuarioEntity).getId();
+        return oTipousuarioRepository.save(oNewTipoTipousuarioEntity).getId();
     }
 
     public Long count() {
@@ -42,11 +45,11 @@ public class TipousuarioService {
         return oTipousuarioRepository.count();
     }
 
-    public Long update(TipousuarioEntity oTipousuarioEntity) {
+    public Long update(TipousuarioEntity oTipoTipousuarioEntity) {
         // oAuthService.OnlyAdmins();
-        validate(oTipousuarioEntity.getId());
-        oTipousuarioRepository.save(oTipousuarioEntity);
-        return oTipousuarioEntity.getId();
+        validate(oTipoTipousuarioEntity.getId());
+        oTipousuarioRepository.save(oTipoTipousuarioEntity);
+        return oTipoTipousuarioEntity.getId();
     }
 
     public Long delete(Long id) {
@@ -62,13 +65,13 @@ public class TipousuarioService {
 
     public TipousuarioEntity getOneRandom() {
         if (count() > 0) {
-            TipousuarioEntity oTipoUsuarioEntity = null;
+            TipousuarioEntity oTipoTipousuarioEntity = null;
             int iPosicion = RandomHelper.getRandomInt(0, (int) oTipousuarioRepository.count() - 1);
             Pageable oPageable = PageRequest.of(iPosicion, 1);
             Page<TipousuarioEntity> TipoUsuarioPage = oTipousuarioRepository.findAll(oPageable);
             List<TipousuarioEntity> usuarioList = TipoUsuarioPage.getContent();
-            oTipoUsuarioEntity = oTipousuarioRepository.getReferenceById(oTipoUsuarioEntity.getId());
-            return oTipoUsuarioEntity;
+            oTipoTipousuarioEntity = oTipousuarioRepository.getReferenceById(oTipoTipousuarioEntity.getId());
+            return oTipoTipousuarioEntity;
         } else {
             throw new CannotPerformOperationException("ho hay usuarios en la base de datos");
         }
@@ -85,6 +88,27 @@ public class TipousuarioService {
                         .findByNombre(strFilter, oPageable);
             }
             return oPage;
+        }
+
+        private TipousuarioEntity generateTipoUsuario() {
+            TipousuarioEntity oTipousuarioEntity = new TipousuarioEntity();
+            oTipousuarioEntity.setNombre(TiposDeUsuario.get(RandomHelper.getRandomInt(0, TiposDeUsuario.size() - 1)));
+            return oTipousuarioEntity;
+        }
+    
+        public TipousuarioEntity generateOne() {
+            // oAuthService.OnlyAdmins();
+            return oTipousuarioRepository.save(generateTipoUsuario());
+        }
+    
+        public Long generateSome(Long amount) {
+            // oAuthService.OnlyAdmins();
+            List<TipousuarioEntity> usuarioToSave = new ArrayList<>();
+            for (int i = 0; i < amount; i++) {
+                usuarioToSave.add(generateTipoUsuario());
+            }
+            oTipousuarioRepository.saveAll(usuarioToSave);
+            return oTipousuarioRepository.count();
         }
 
 

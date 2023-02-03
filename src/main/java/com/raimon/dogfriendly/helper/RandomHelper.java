@@ -45,9 +45,9 @@ public class RandomHelper {
         return RandomHelper.getRadomDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
-    public static LocalDate getRadomDate() {
+    public static Date getRadomDate() {
         GregorianCalendar gc = new GregorianCalendar();
-        int year = getRandomInt(2010, 2023);
+        int year = getRandomInt(2010, 2019);
         gc.set(gc.YEAR, year);
         int dayOfYear = getRandomInt(1, gc.getActualMaximum(gc.DAY_OF_YEAR));
         gc.set(gc.DAY_OF_YEAR, dayOfYear);
@@ -58,6 +58,12 @@ public class RandomHelper {
     public static LocalDateTime getRadomDate2() {
         int randomSeconds = new Random().nextInt(3600 * 24);
         LocalDateTime anyTime = LocalDateTime.now().minusSeconds(randomSeconds);
+        return anyTime;
+    }
+
+    public static LocalDate getRandomLocalDate() {
+        int randomDays = new Random().nextInt(3600 * 24);
+        LocalDate anyTime = LocalDate.now().plusDays(randomDays);
         return anyTime;
     }
 
@@ -84,6 +90,12 @@ public class RandomHelper {
         } catch (NoSuchAlgorithmException ex) {
             throw new CannotPerformOperationException("no such algorithm: sha256");
         }
+    }
+    public static Boolean getRandomBoolean(){
+        if (getRandomInt(1, 2) == 1 )
+             return true;
+        else
+            return false;
     }
 
 }
