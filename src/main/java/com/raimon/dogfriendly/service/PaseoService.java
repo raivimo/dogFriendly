@@ -3,6 +3,10 @@ package com.raimon.dogfriendly.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.raimon.dogfriendly.entity.UsuarioEntity;
+import com.raimon.dogfriendly.entity.TipopaseoEntity;
+import com.raimon.dogfriendly.entity.PerroEntity;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -164,19 +168,19 @@ public class PaseoService {
             oPaseoEntity.setLugar(nombreLugar.get(RandomHelper.getRandomInt(0, nombreLugar.size() - 1)));
             oPaseoEntity.setFecha((RandomHelper.getRandomLocalDate()));
             oPaseoEntity.setPrecio(RandomHelper.getRandomInt(5, 25));
-      
-            int totalTipopaseo = (int) oTipopaseoRepository.count();
-            int randomTipoPaseoId = RandomHelper.getRandomInt(1, totalTipopaseo);
-            oTipopaseoRepository.findById((long) randomTipoPaseoId).ifPresent(oPaseoEntity::setTipopaseo);
-    
-            int totalUsuario = (int) oUsuarioRepository.count();
-            int randomUsuarioId = RandomHelper.getRandomInt(1, totalUsuario);
-            oUsuarioRepository.findById((long) randomUsuarioId).ifPresent(oPaseoEntity::setUsuario);
 
-            int totalPerro = (int) oPerroRepository.count();
-            int randomPerroId = RandomHelper.getRandomInt(1, totalPerro);
-            oPerroRepository.findById((long) randomPerroId).ifPresent(oPaseoEntity::setPerro);
+            List<TipopaseoEntity> allTipoPaseo = oTipopaseoRepository.findAll();
+            TipopaseoEntity randomTipoPaseo = allTipoPaseo.get(RandomHelper.getRandomInt(0, allTipoPaseo.size() - 1));
+            oPaseoEntity.setTipopaseo(randomTipoPaseo);
 
+            List<UsuarioEntity> allUsuarios = oUsuarioRepository.findAll();
+            UsuarioEntity randomUsuario = allUsuarios.get(RandomHelper.getRandomInt(0, allUsuarios.size() - 1));
+            oPaseoEntity.setUsuario(randomUsuario);
+
+            List<PerroEntity> allPerros = oPerroRepository.findAll();
+            PerroEntity randomPerro = allPerros.get(RandomHelper.getRandomInt(0, allPerros.size() - 1));
+            oPaseoEntity.setPerro(randomPerro);
+            
             return oPaseoEntity;
         }
 

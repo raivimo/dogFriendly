@@ -15,6 +15,7 @@ import com.raimon.dogfriendly.exception.ResourceNotFoundException;
 import com.raimon.dogfriendly.exception.ResourceNotModifiedException;
 import com.raimon.dogfriendly.exception.ValidationException;
 import com.raimon.dogfriendly.helper.RandomHelper;
+import com.raimon.dogfriendly.helper.TipoUsuarioHelper;
 import com.raimon.dogfriendly.helper.ValidationHelper;
 import com.raimon.dogfriendly.repository.TipousuarioRepository;
 import com.raimon.dogfriendly.repository.UsuarioRepository;
@@ -153,16 +154,16 @@ public class UsuarioService {
         oUsuarioEntity.setApellido1(surnames.get(RandomHelper.getRandomInt(0, names.size() - 1)));
         oUsuarioEntity.setApellido2(last_names.get(RandomHelper.getRandomInt(0, names.size() - 1)));
         oUsuarioEntity.setFechaNacimiento(RandomHelper.getRandomLocalDate());
-        oUsuarioEntity.setLogin((oUsuarioEntity.getNombre().toLowerCase()
-                + oUsuarioEntity.getApellido1().toLowerCase()).replaceAll("\\s", ""));
+        oUsuarioEntity.setLogin((oUsuarioEntity.getNombre().toLowerCase()));
+
         oUsuarioEntity.setEmail(oUsuarioEntity.getLogin() + "@dogfriendly.net");
         oUsuarioEntity.setPassword(DOGFRIENDLY_DEFAULT_PASSWORD);
 
-        int totalUsertypes = (int) oTipousuarioRepository.count();
-        int randomUserTypeId = RandomHelper.getRandomInt(1, totalUsertypes);
-        oTipousuarioRepository.findById((long) randomUserTypeId)
-                .ifPresent(oUsuarioEntity::setTipousuario);
-
+        if (RandomHelper.getRandomInt(0, 10) > 1) {
+            oUsuarioEntity.setTipousuario(oTipousuarioRepository.getReferenceById(TipoUsuarioHelper.USER));
+        } else {
+            oUsuarioEntity.setTipousuario(oTipousuarioRepository.getReferenceById(TipoUsuarioHelper.ADMIN));
+        }
         return oUsuarioEntity;
     }
 

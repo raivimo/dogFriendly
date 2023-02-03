@@ -9,7 +9,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.raimon.dogfriendly.entity.UsuarioEntity;
 import com.raimon.dogfriendly.entity.PerroEntity;
+import com.raimon.dogfriendly.entity.RazaEntity;
 import com.raimon.dogfriendly.exception.CannotPerformOperationException;
 import com.raimon.dogfriendly.exception.ResourceNotFoundException;
 import com.raimon.dogfriendly.exception.ResourceNotModifiedException;
@@ -141,13 +143,14 @@ public class PerroService {
         oPerroEntity.setPuedeIrSuelto(RandomHelper.getRandomBoolean());
         oPerroEntity.setEsJugueton(RandomHelper.getRandomBoolean());
 
-        int totalUsuario = (int) oUsuarioRepository.count();
-        int randomUsuarioId = RandomHelper.getRandomInt(1, totalUsuario);
-        oUsuarioRepository.findById((long) randomUsuarioId).ifPresent(oPerroEntity::setUsuario);
+        List<UsuarioEntity> allUsuarios = oUsuarioRepository.findAll();
+        UsuarioEntity randomUsuario = allUsuarios.get(RandomHelper.getRandomInt(0, allUsuarios.size() - 1));
+        oPerroEntity.setUsuario(randomUsuario);
+    
+        List<RazaEntity> allRazas = oRazaRepository.findAll();
+        RazaEntity randomRaza = allRazas.get(RandomHelper.getRandomInt(0, allRazas.size() - 1));
+        oPerroEntity.setRazas(randomRaza);
 
-        int totalRaza = (int) oRazaRepository.count();
-        int randomRazaId = RandomHelper.getRandomInt(1, totalRaza);
-        oRazaRepository.findById((long) randomRazaId).ifPresent(oPerroEntity::setRazas);
         return oPerroEntity;
     }
 

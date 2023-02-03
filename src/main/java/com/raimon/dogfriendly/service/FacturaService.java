@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.raimon.dogfriendly.entity.FacturaEntity;
+import com.raimon.dogfriendly.entity.PaseoEntity;
 import com.raimon.dogfriendly.exception.ResourceNotFoundException;
 import com.raimon.dogfriendly.exception.ResourceNotModifiedException;
 import com.raimon.dogfriendly.helper.RandomHelper;
@@ -95,14 +96,14 @@ public class FacturaService {
 
     private FacturaEntity generateFactura() {
         FacturaEntity oFacturaEntity = new FacturaEntity();
-
         oFacturaEntity.setFecha(RandomHelper.getRandomLocalDate());
         oFacturaEntity.setIva(21);
         oFacturaEntity.setPagado(RandomHelper.getRandomBoolean());
 
-        int totalPaseos = (int) oPaseoRepository.count();
-        int randomPaseoId = RandomHelper.getRandomInt(1, totalPaseos);
-        oPaseoRepository.findById((long) randomPaseoId).ifPresent(oFacturaEntity::setPaseo);
+        List<PaseoEntity> allPaseos = oPaseoRepository.findAll();
+        PaseoEntity randomPaseo = allPaseos.get(RandomHelper.getRandomInt(0, allPaseos.size() - 1));
+        oFacturaEntity.setPaseo(randomPaseo);
+
         return oFacturaEntity;
     }
 
