@@ -58,8 +58,10 @@ public class PaseoController {
     public ResponseEntity<Page<PaseoEntity>> getPage(
             @ParameterObject @PageableDefault(page = 0, size = 5, direction = Sort.Direction.DESC) Pageable oPageable,
             @RequestParam(name = "filter", required = false) String strFilter,
-            @RequestParam(name = "tipousuario", required = false) Long lTipoUsuario) {
-        return new ResponseEntity<Page<PaseoEntity>>(oPaseoService.getPage(oPageable, strFilter), HttpStatus.OK);
+            @RequestParam(name = "tipopaseo", required = false) Long lTipopaseo,
+            @RequestParam(name = "usuario", required = false) Long lUsuario,
+            @RequestParam(name = "perro", required = false) Long lPerro) {
+        return new ResponseEntity<Page<PaseoEntity>>(oPaseoService.getPage(oPageable, strFilter,  lTipopaseo, lUsuario, lPerro), HttpStatus.OK);
     }
 
 }

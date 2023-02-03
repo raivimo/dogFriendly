@@ -24,7 +24,7 @@ public class PerroService {
 
     @Autowired
     AuthService oAuthService;
-    
+
     public void validate(Long id) {
         if (!oPerroRepository.existsById(id)) {
             throw new ResourceNotFoundException("id " + id + " not exist");
@@ -37,8 +37,8 @@ public class PerroService {
     }
 
     public Long create(PerroEntity oNewPerroEntity) {
-       /*  oAuthService.OnlyAdmins(); */
-        //validate(oNewUsuarioEntity);
+        /* oAuthService.OnlyAdmins(); */
+        // validate(oNewUsuarioEntity);
         oNewPerroEntity.setId(0L);
         return oPerroRepository.save(oNewPerroEntity).getId();
     }
@@ -56,7 +56,7 @@ public class PerroService {
     }
 
     public Long delete(Long id) {
-     /*    oAuthService.OnlyAdmins(); */
+        /* oAuthService.OnlyAdmins(); */
         validate(id);
         oPerroRepository.deleteById(id);
         if (oPerroRepository.existsById(id)) {
@@ -80,54 +80,43 @@ public class PerroService {
         }
     }
 
-    public Page<PerroEntity> getPage(Pageable oPageable, String strFilter, Long lUsuario, Long lRaza) {
-        /* oAuthService.OnlyAdminsOrUsers(); */
+    public Page<PerroEntity> getPage(Pageable oPageable, String strFilter, Long id_raza, Long id_usuario) {
+        // oAuthService.OnlyAdmins();
         ValidationHelper.validateRPP(oPageable.getPageSize());
         Page<PerroEntity> oPage = null;
-        /* if (oAuthService.isAdmin()) { */
-       /*      if (lUsuario != null) {
-                if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
-                    oPage = oPerroRepository.findByUsuarioId(lUsuario, oPageable);
-                } else {
-                    oPage = oPerroRepository.findByUsuarioIdAndNombreContainingOrFechaContainingOrGeneroContainingOrPesoContainingOrSociableContainingOrPuedeIrSueltoContainingOrEsJuguetonContaining(lUsuario, strFilter, strFilter, strFilter, strFilter, strFilter, strFilter, strFilter, oPageable);
-                }
-            } else if (lRaza != null) {
-                if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
-                    oPage = oPerroRepository.findByRazaId(lRaza, oPageable);
-                } else {
-                    oPage = oPerroRepository.findByRazaIdAndNombreContainingOrFechaContainingOrGeneroContainingOrPesoContainingOrSociableContainingOrPuedeIrSueltoContainingOrEsJuguetonContaining(lRaza, strFilter, strFilter, strFilter, strFilter, strFilter, strFilter, strFilter, oPageable);
-                }
-            } else { */
-                if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
-                    oPage = oPerroRepository.findAll(oPageable);
-                } else {
-                    oPage =  oPerroRepository.findByUsuarioIdAndNombreContainingOrFechaContainingOrGeneroContainingOrPesoContainingOrSociableContainingOrPuedeIrSueltoContainingOrEsJuguetonContaining(lUsuario, strFilter, strFilter, strFilter, strFilter, strFilter, strFilter, strFilter, oPageable);
-                }
-            /* } */
-         /* else {
-            if (lUsuario != null) {
-                if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
-                    oPage = oPerroRepository.findByUsuarioIdAndRazaId(lUsuario, oAuthService.getUserID(), oPageable);
-                } else {
-                    oPage = oCompraRepository.findByFacturaIdAndUsuarioIdAndCantidadContainingOrPrecioContainingOrFechaContainingOrDescuento_usuarioContainingOrDescuento_productoContaining(lFactura, oAuthService.getUserID(), strFilter, strFilter, strFilter, strFilter, strFilter, oPageable);
-                }
-            } else if (lRaza != null) {
-                if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
-                    oPage = oPerroRepository.findByUsuarioIdAndRazaId(lUsuario, oAuthService.getUserID(), oPageable);
-                } else {
-                    oPage = oCompraRepository.findByProductoIdAndUsuarioIdAndCantidadContainingOrPrecioContainingOrFechaContainingOrDescuento_usuarioContainingOrDescuento_productoContaining(lProducto, oAuthService.getUserID(), strFilter, strFilter, strFilter, strFilter, strFilter, oPageable);
-                }
-            } else {
-                if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
-                    oPage = oPerroRepository.findByUsuarioId(oAuthService.getUserID(), oPageable);
-                } else {
-                    oPage = oCompraRepository.findByUsuarioIdAndCantidadContainingOrPrecioContainingOrFechaContainingOrDescuento_usuarioContainingOrDescuento_productoContaining(oAuthService.getUserID(), strFilter, strFilter, strFilter, strFilter, strFilter, oPageable);
-                }
+
+        // Pasar id_usuario
+        if (id_raza == null && id_usuario != null) {
+            if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                oPage = oPerroRepository.findByUsuarioId(id_usuario, oPageable);
             }
-        } */
+            oPage = oPerroRepository.findByUsuarioIdAndNombreIgnoreCaseContainingOrFechaNacimientoIgnoreCaseContaining(
+                    id_usuario, strFilter, strFilter, oPageable);
+        }
+        // Pasar id_raza
+        if (id_raza != null && id_usuario == null) {
+            if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                oPage = oPerroRepository.findByRazaId(id_raza, oPageable);
+            }
+            oPage = oPerroRepository.findByRazaIdAndNombreIgnoreCaseContainingOrFechaNacimientoIgnoreCaseContaining(
+                    id_raza, strFilter, strFilter, oPageable);
+        }
+        // Pasando todo
+        if (id_raza != null && id_usuario != null) {
+            if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                oPage = oPerroRepository.findByRazaIdAndUsuarioId(id_raza, id_usuario, oPageable);
+            }
+            oPage = oPerroRepository.findByRazaIdAndUsuarioIdAndNombreIgnoreCaseContainingOrFechaNacimiento(id_raza,
+                    id_usuario, strFilter, strFilter, oPageable);
+        }
+        // Pasando nada
+        if (id_raza == null && id_usuario == null) {
+            if (strFilter == null || strFilter.isEmpty() || strFilter.trim().isEmpty()) {
+                oPage = oPerroRepository.findAll(oPageable);
+            }
+            oPage = oPerroRepository.findByNombreIgnoreCaseContaining(strFilter, oPageable);
+        }
         return oPage;
     }
-
-
 
 }

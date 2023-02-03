@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -44,7 +45,7 @@ public class RandomHelper {
         return RandomHelper.getRadomDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
-    public static Date getRadomDate() {
+    public static LocalDate getRadomDate() {
         GregorianCalendar gc = new GregorianCalendar();
         int year = getRandomInt(2010, 2023);
         gc.set(gc.YEAR, year);
