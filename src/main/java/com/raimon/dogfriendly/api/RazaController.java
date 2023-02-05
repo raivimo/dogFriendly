@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.raimon.dogfriendly.entity.FacturaEntity;
 import com.raimon.dogfriendly.entity.RazaEntity;
 import com.raimon.dogfriendly.service.RazaService;
 

@@ -64,7 +64,7 @@ public class UsuarioService {
                 "campo lastname de Developer(el campo debe tener longitud de 2 a 50 caracteres)");
         ValidationHelper.validateEmail(oUsuarioEntity.getEmail(), "campo email de Usuario");
         ValidationHelper.validateLogin(oUsuarioEntity.getLogin(), "campo login de Usuario");
-        if (oUsuarioRepository.findByLogin(oUsuarioEntity.getLogin())) {
+        if (oUsuarioRepository.existsById(oUsuarioEntity.getId() ) ) {
             throw new ValidationException("el campo login está repetido");
         }
         oTipousuarioService.validate(oUsuarioEntity.getTipousuario().getId());
@@ -78,7 +78,7 @@ public class UsuarioService {
     }
 
     public Long create(UsuarioEntity oNewUsuarioEntity) {
-        // oAuthService.OnlyAdmins();
+        oAuthService.OnlyAdmins();
         // validate(oNewUsuarioEntity);
         oNewUsuarioEntity.setId(0L);
         oNewUsuarioEntity.setPassword(DOGFRIENDLY_DEFAULT_PASSWORD);

@@ -1,6 +1,7 @@
 package com.raimon.dogfriendly.entity;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.time.LocalDate;
 
 
@@ -11,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -39,6 +41,14 @@ public class UsuarioEntity  {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_tipousuario")
     private TipousuarioEntity tipousuario;
+
+    
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private final List<PerroEntity> perros;
+
+    public UsuarioEntity() {
+        this.perros = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;
@@ -110,6 +120,10 @@ public class UsuarioEntity  {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getPerros() {
+        return perros.size();
     }
 
 
