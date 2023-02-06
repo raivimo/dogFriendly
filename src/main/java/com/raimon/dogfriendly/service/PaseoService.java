@@ -60,10 +60,8 @@ public class PaseoService {
     }
 
     public Long create(PaseoEntity oNewPaseoEntity) {
-        /*
-         * oAuthService.OnlyAdmins();
-         * validate(oNewPaseoEntity);
-         */
+        oAuthService.OnlyAdmins();
+        //validate(oNewPaseoEntity);
         oNewPaseoEntity.setId(0L);
         return oPaseoRepository.save(oNewPaseoEntity).getId();
     }
