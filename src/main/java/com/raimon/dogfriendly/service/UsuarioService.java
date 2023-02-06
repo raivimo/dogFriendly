@@ -15,6 +15,7 @@ import com.raimon.dogfriendly.exception.ResourceNotFoundException;
 import com.raimon.dogfriendly.exception.ResourceNotModifiedException;
 import com.raimon.dogfriendly.exception.ValidationException;
 import com.raimon.dogfriendly.helper.RandomHelper;
+import com.raimon.dogfriendly.helper.TipoUsuarioHelper;
 import com.raimon.dogfriendly.helper.ValidationHelper;
 import com.raimon.dogfriendly.repository.TipousuarioRepository;
 import com.raimon.dogfriendly.repository.UsuarioRepository;
@@ -55,20 +56,19 @@ public class UsuarioService {
     }
 
     public void validate(UsuarioEntity oUsuarioEntity) {
-        ValidationHelper.validateStringLength(oUsuarioEntity.getNombre(), 2, 50,
-                "campo name de Developer(el campo debe tener longitud de 2 a 50 caracteres)");
-        ValidationHelper.validateStringLength(oUsuarioEntity.getApellido1(), 2, 50,
-                "campo surname de Developer(el campo debe tener longitud de 2 a 50 caracteres)");
-        ValidationHelper.validateStringLength(oUsuarioEntity.getApellido2(), 2, 50,
-                "campo lastname de Developer(el campo debe tener longitud de 2 a 50 caracteres)");
+        ValidationHelper.validateStringLength(oUsuarioEntity.getNombre(), 2, 20,
+                "campo name de Usuario(el campo debe tener longitud de 2 a 20 caracteres)");
+        ValidationHelper.validateStringLength(oUsuarioEntity.getApellido1(), 2, 20,
+                "campo surname de Developer(el campo debe tener longitud de 2 a 20 caracteres)");
+        ValidationHelper.validateStringLength(oUsuarioEntity.getApellido2(), 2, 20,
+                "campo lastname de Developer(el campo debe tener longitud de 2 a 20 caracteres)");
         ValidationHelper.validateEmail(oUsuarioEntity.getEmail(), "campo email de Usuario");
         ValidationHelper.validateLogin(oUsuarioEntity.getLogin(), "campo login de Usuario");
-        if (oUsuarioRepository.findByLogin(oUsuarioEntity.getLogin())) {
+        if (oUsuarioRepository.existsById(oUsuarioEntity.getId() ) ) {
             throw new ValidationException("el campo login está repetido");
         }
         oTipousuarioService.validate(oUsuarioEntity.getTipousuario().getId());
     }
-
     // -- End Validation --
 
     public UsuarioEntity get(Long id) {
@@ -77,8 +77,8 @@ public class UsuarioService {
     }
 
     public Long create(UsuarioEntity oNewUsuarioEntity) {
-        // oAuthService.OnlyAdmins();
-        // validate(oNewUsuarioEntity);
+        /* oAuthService.OnlyAdmins(); */
+        validate(oNewUsuarioEntity);
         oNewUsuarioEntity.setId(0L);
         oNewUsuarioEntity.setPassword(DOGFRIENDLY_DEFAULT_PASSWORD);
         return oUsuarioRepository.save(oNewUsuarioEntity).getId();
@@ -98,7 +98,7 @@ public class UsuarioService {
     }
 
     public Long delete(Long id) {
-        // oAuthService.OnlyAdmins();
+        oAuthService.OnlyAdmins();
         validate(id);
         oUsuarioRepository.deleteById(id);
         if (oUsuarioRepository.existsById(id)) {
@@ -152,20 +152,17 @@ public class UsuarioService {
         oUsuarioEntity.setNombre(names.get(RandomHelper.getRandomInt(0, names.size() - 1)));
         oUsuarioEntity.setApellido1(surnames.get(RandomHelper.getRandomInt(0, names.size() - 1)));
         oUsuarioEntity.setApellido2(last_names.get(RandomHelper.getRandomInt(0, names.size() - 1)));
+        oUsuarioEntity.setFechaNacimiento(RandomHelper.getRandomLocalDate());
+        oUsuarioEntity.setLogin((oUsuarioEntity.getNombre().toLowerCase()));
 
-        oUsuarioEntity.setFechaNacimiento(RandomHelper.getRadomDate());
-
-        oUsuarioEntity.setLogin((oUsuarioEntity.getNombre().toLowerCase()
-                + oUsuarioEntity.getApellido1().toLowerCase()).replaceAll("\\s", ""));
         oUsuarioEntity.setEmail(oUsuarioEntity.getLogin() + "@dogfriendly.net");
-
         oUsuarioEntity.setPassword(DOGFRIENDLY_DEFAULT_PASSWORD);
 
-        int totalUsertypes = (int) oTipousuarioRepository.count();
-        int randomUserTypeId = RandomHelper.getRandomInt(1, totalUsertypes);
-        oTipousuarioRepository.findById((long) randomUserTypeId)
-                .ifPresent(oUsuarioEntity::setTipousuario);
-
+        if (RandomHelper.getRandomInt(0, 10) > 1) {
+            oUsuarioEntity.setTipousuario(oTipousuarioRepository.getReferenceById(TipoUsuarioHelper.USER));
+        } else {
+            oUsuarioEntity.setTipousuario(oTipousuarioRepository.getReferenceById(TipoUsuarioHelper.ADMIN));
+        }
         return oUsuarioEntity;
     }
 
@@ -183,5 +180,6 @@ public class UsuarioService {
         oUsuarioRepository.saveAll(usuarioToSave);
         return oUsuarioRepository.count();
     }
+
 
 }

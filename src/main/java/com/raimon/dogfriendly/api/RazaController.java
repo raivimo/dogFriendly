@@ -62,6 +62,17 @@ public class RazaController {
         return new ResponseEntity<Page<RazaEntity>>(oRazaService.getPage(oPageable, strFilter), HttpStatus.OK);
     }
 
+    @PostMapping("/generate")
+    public ResponseEntity<RazaEntity> generateOne() {
+        return new ResponseEntity<>(oRazaService.generateOne(), HttpStatus.OK);
+    }
+
+    @PostMapping("/generate/{amount}")
+    public ResponseEntity<Long> generateSome(@PathVariable Long amount) {
+        return new ResponseEntity<>(oRazaService.generateSome(amount), HttpStatus.OK);
+    }
+
+
 
 
 

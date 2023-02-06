@@ -10,7 +10,8 @@ import com.raimon.dogfriendly.entity.UsuarioEntity;
 public interface UsuarioRepository extends JpaRepository <UsuarioEntity, Long>{
     
     UsuarioEntity findByLoginAndPassword(String login, String password);
-    boolean findByLogin(String login);
+    UsuarioEntity findByLogin(String strUsuarioName);
+    
     boolean existsByLogin(String login);
 
     @Query(value = "SELECT * FROM usuario WHERE id_tipousuario = ?1 AND (nombre LIKE %?3% OR apellido1 LIKE %?4% OR apellido2 LIKE %?5%)", nativeQuery = true)

@@ -1,9 +1,14 @@
 package com.raimon.dogfriendly.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -19,19 +24,13 @@ public class RazaEntity {
 
     private String nombre;
     private String tamanyo;
-/* 
+
     @OneToMany(mappedBy = "raza", fetch = FetchType.LAZY)
     private final List<PerroEntity> perros;
 
     public RazaEntity() {
         this.perros = new ArrayList<>();
     }
-
-    public RazaEntity(long id, String nombre) {
-        this.id = id;
-        this.nombre = nombre;
-        this.perros = new ArrayList<>();
-    } */
 
     public Long getId() {
         return id;
@@ -57,8 +56,8 @@ public class RazaEntity {
         this.tamanyo = tamanyo;
     }
 
-/*     public int getPerros() {
+   public int getPerros() {
         return perros.size();
-    } */
+    }
 
 }

@@ -1,21 +1,30 @@
 package com.raimon.dogfriendly.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.raimon.dogfriendly.entity.FacturaEntity;
+import com.raimon.dogfriendly.entity.PaseoEntity;
 import com.raimon.dogfriendly.exception.ResourceNotFoundException;
 import com.raimon.dogfriendly.exception.ResourceNotModifiedException;
+import com.raimon.dogfriendly.helper.RandomHelper;
 import com.raimon.dogfriendly.helper.ValidationHelper;
 import com.raimon.dogfriendly.repository.FacturaRepository;
+import com.raimon.dogfriendly.repository.PaseoRepository;
 
 @Service
 public class FacturaService {
 
     @Autowired
     FacturaRepository oFacturaRepository;
+
+    @Autowired
+    PaseoRepository oPaseoRepository;
 
     @Autowired
     AuthService oAuthService;
@@ -31,7 +40,6 @@ public class FacturaService {
         return oFacturaRepository.count();
     }
 
-
     public FacturaEntity get(Long id) {
         return oFacturaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Team with id: " + id + " not found"));
@@ -39,11 +47,10 @@ public class FacturaService {
 
     public Long create(FacturaEntity oNewFacturaEntity) {
         /* oAuthService.OnlyAdmins(); */
-        //validate(oNewUsuarioEntity);
+        // validate(oNewUsuarioEntity);
         oNewFacturaEntity.setId(0L);
         return oFacturaRepository.save(oNewFacturaEntity).getId();
     }
-
 
     public Long update(FacturaEntity oFacturaEntity) {
         validate(oFacturaEntity.getId());
@@ -63,7 +70,6 @@ public class FacturaService {
         }
     }
 
-    
     public Page<FacturaEntity> getPage(Pageable oPageable, String strFilter, Long lPaseo) {
         // oAuthService.OnlyAdmins();
         ValidationHelper.validateRPP(oPageable.getPageSize());
@@ -86,6 +92,34 @@ public class FacturaService {
             }
         }
         return oPage;
+    }
+
+    private FacturaEntity generateFactura() {
+        FacturaEntity oFacturaEntity = new FacturaEntity();
+        oFacturaEntity.setFecha(RandomHelper.getRandomLocalDate());
+        oFacturaEntity.setIva(21);
+        oFacturaEntity.setPagado(RandomHelper.getRandomBoolean());
+
+        List<PaseoEntity> allPaseos = oPaseoRepository.findAll();
+        PaseoEntity randomPaseo = allPaseos.get(RandomHelper.getRandomInt(0, allPaseos.size() - 1));
+        oFacturaEntity.setPaseo(randomPaseo);
+
+        return oFacturaEntity;
+    }
+
+    public FacturaEntity generateOne() {
+        // oAuthService.OnlyAdmins();
+        return oFacturaRepository.save(generateFactura());
+    }
+
+    public Long generateSome(Long amount) {
+        // oAuthService.OnlyAdmins();
+        List<FacturaEntity> facturaToSave = new ArrayList<>();
+        for (int i = 0; i < amount; i++) {
+            facturaToSave.add(generateFactura());
+        }
+        oFacturaRepository.saveAll(facturaToSave);
+        return oFacturaRepository.count();
     }
 
 }
