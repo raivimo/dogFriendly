@@ -50,6 +50,9 @@ public class PaseoEntity  {
     @OneToMany(mappedBy = "paseo", fetch = FetchType.LAZY)
     private final List<FacturaEntity> facturas;
 
+/*     @OneToMany(mappedBy = "paseo", fetch = FetchType.LAZY)
+    private final List<FacturaEntity> facturas; */
+
 
     public PaseoEntity(){
         this.facturas = new ArrayList<>();

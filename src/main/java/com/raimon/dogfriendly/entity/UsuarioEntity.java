@@ -46,6 +46,8 @@ public class UsuarioEntity  {
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private final List<PerroEntity> perros;
 
+   
+
     public UsuarioEntity() {
         this.perros = new ArrayList<>();
     }
@@ -125,7 +127,6 @@ public class UsuarioEntity  {
     public int getPerros() {
         return perros.size();
     }
-
 
     
     
