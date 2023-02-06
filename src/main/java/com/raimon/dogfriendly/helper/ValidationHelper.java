@@ -57,7 +57,7 @@ public class ValidationHelper {
     } */
 
     public static void validateEmail(String email, String error) {
-        validateStringLength(email, 3, 255, error);
+        validateStringLength(email, 3, 20, error);
         String ePattern = "^.+@.+\\..+$";
         java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
         java.util.regex.Matcher m = p.matcher(email);

@@ -56,12 +56,12 @@ public class UsuarioService {
     }
 
     public void validate(UsuarioEntity oUsuarioEntity) {
-        ValidationHelper.validateStringLength(oUsuarioEntity.getNombre(), 2, 50,
-                "campo name de Developer(el campo debe tener longitud de 2 a 50 caracteres)");
-        ValidationHelper.validateStringLength(oUsuarioEntity.getApellido1(), 2, 50,
-                "campo surname de Developer(el campo debe tener longitud de 2 a 50 caracteres)");
-        ValidationHelper.validateStringLength(oUsuarioEntity.getApellido2(), 2, 50,
-                "campo lastname de Developer(el campo debe tener longitud de 2 a 50 caracteres)");
+        ValidationHelper.validateStringLength(oUsuarioEntity.getNombre(), 2, 20,
+                "campo name de Usuario(el campo debe tener longitud de 2 a 20 caracteres)");
+        ValidationHelper.validateStringLength(oUsuarioEntity.getApellido1(), 2, 20,
+                "campo surname de Developer(el campo debe tener longitud de 2 a 20 caracteres)");
+        ValidationHelper.validateStringLength(oUsuarioEntity.getApellido2(), 2, 20,
+                "campo lastname de Developer(el campo debe tener longitud de 2 a 20 caracteres)");
         ValidationHelper.validateEmail(oUsuarioEntity.getEmail(), "campo email de Usuario");
         ValidationHelper.validateLogin(oUsuarioEntity.getLogin(), "campo login de Usuario");
         if (oUsuarioRepository.existsById(oUsuarioEntity.getId() ) ) {
@@ -69,7 +69,6 @@ public class UsuarioService {
         }
         oTipousuarioService.validate(oUsuarioEntity.getTipousuario().getId());
     }
-
     // -- End Validation --
 
     public UsuarioEntity get(Long id) {
@@ -78,8 +77,8 @@ public class UsuarioService {
     }
 
     public Long create(UsuarioEntity oNewUsuarioEntity) {
-        oAuthService.OnlyAdmins();
-        // validate(oNewUsuarioEntity);
+        /* oAuthService.OnlyAdmins(); */
+        validate(oNewUsuarioEntity);
         oNewUsuarioEntity.setId(0L);
         oNewUsuarioEntity.setPassword(DOGFRIENDLY_DEFAULT_PASSWORD);
         return oUsuarioRepository.save(oNewUsuarioEntity).getId();
@@ -99,7 +98,7 @@ public class UsuarioService {
     }
 
     public Long delete(Long id) {
-        // oAuthService.OnlyAdmins();
+        oAuthService.OnlyAdmins();
         validate(id);
         oUsuarioRepository.deleteById(id);
         if (oUsuarioRepository.existsById(id)) {

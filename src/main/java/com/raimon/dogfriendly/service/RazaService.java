@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.raimon.dogfriendly.entity.RazaEntity;
 import com.raimon.dogfriendly.exception.ResourceNotFoundException;
 import com.raimon.dogfriendly.exception.ResourceNotModifiedException;
+import com.raimon.dogfriendly.exception.ValidationException;
 import com.raimon.dogfriendly.helper.RandomHelper;
 import com.raimon.dogfriendly.helper.ValidationHelper;
 import com.raimon.dogfriendly.repository.RazaRepository;
@@ -39,6 +40,16 @@ public class RazaService {
         }
     }
 
+    public void validate(RazaEntity oRazaEntity) {
+        ValidationHelper.validateStringLength(oRazaEntity.getNombre(), 2, 20,
+                "campo name de Usuario(el campo debe tener longitud de 2 a 20 caracteres)");
+        ValidationHelper.validateStringLength(oRazaEntity.getTamanyo(), 2, 20,
+                "campo surname de Developer(el campo debe tener longitud de 2 a 20 caracteres)");
+        if (oRazaRepository.existsById(oRazaEntity.getId() ) ) {
+            throw new ValidationException("el campo login está repetido");
+        }
+    }
+
     public RazaEntity get(Long id) {
         return oRazaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Team with id: " + id + " not found"));
@@ -46,7 +57,7 @@ public class RazaService {
 
     public Long create(RazaEntity oNewRazaEntity) {
         // oAuthService.OnlyAdmins();
-        // validate(oNewUsuarioEntity);
+        validate(oNewRazaEntity);
         return oRazaRepository.save(oNewRazaEntity).getId();
     }
 
@@ -56,9 +67,9 @@ public class RazaService {
     }
 
     public Long update(RazaEntity oRazaEntity) {
-        validate(oRazaEntity.getId());
         // oAuthService.OnlyAdmins();
-        RazaEntity oOldRazaEntity = oRazaRepository.getReferenceById(oRazaEntity.getId());
+        validate(oRazaEntity.getId());
+        oRazaRepository.getReferenceById(oRazaEntity.getId());
         return oRazaRepository.save(oRazaEntity).getId();
     }
 
