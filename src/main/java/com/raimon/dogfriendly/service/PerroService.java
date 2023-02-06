@@ -94,7 +94,7 @@ public class PerroService {
         }
     }
 
-    public Page<PerroEntity> getPage(Pageable oPageable, String strFilter, Long id_raza, Long id_usuario) {
+    public Page<PerroEntity> getPage(Pageable oPageable, String strFilter, Long id_usuario, Long id_raza) {
         // oAuthService.OnlyAdmins();
         ValidationHelper.validateRPP(oPageable.getPageSize());
         Page<PerroEntity> oPage = null;
