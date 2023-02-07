@@ -15,16 +15,16 @@ public interface PerroRepository extends JpaRepository<PerroEntity, Long> {
 
         Page<PerroEntity> findByNombreIgnoreCaseContaining(String strFilter, Pageable oPageable);
 
-        @Query(value = "SELECT * FROM perro WHERE id_usuario = ?1 AND (nombre LIKE  %?2% OR fecha LIKE %?3%)", nativeQuery = true)
+        @Query(value = "SELECT * FROM perro WHERE id_usuario = ?1 AND (nombre LIKE  %?2% AND fechaNacimiento LIKE %?3%)", nativeQuery = true)
         Page<PerroEntity> findByUsuarioIdAndNombreIgnoreCaseContainingOrFechaNacimientoIgnoreCaseContaining(
                         Long id_usuario,
                         String nombre, String fechaNacimiento, Pageable oPageable);
 
-        @Query(value = "SELECT * FROM perro WHERE id_raza = ?1 AND (nombre LIKE  %?2% OR fecha LIKE %?3%)", nativeQuery = true)
+        @Query(value = "SELECT * FROM perro WHERE id_raza = ?1 AND (nombre LIKE  %?2% AND fechaNacimiento LIKE %?3%)", nativeQuery = true)
         Page<PerroEntity> findByRazaIdAndNombreIgnoreCaseContainingOrFechaNacimientoIgnoreCaseContaining(Long id_raza,
                         String nombre, String fechaNacimiento, Pageable oPageable);
 
-        @Query(value = "SELECT * FROM perro WHERE id_raza = ?1 AND id_usuario = ?2 AND (nombre LIKE  %?3% OR fecha LIKE %?4%)", nativeQuery = true)
+        @Query(value = "SELECT * FROM perro WHERE id_raza = ?1 AND id_usuario = ?2 AND (nombre LIKE  %?3% AND fechaNacimiento LIKE %?4%)", nativeQuery = true)
         Page<PerroEntity> findByRazaIdAndUsuarioIdAndNombreIgnoreCaseContainingOrFechaNacimiento(Long id_raza,
                         Long id_usuario, String nombre, String fechaNacimiento, Pageable oPageable);
 
