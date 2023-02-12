@@ -1,6 +1,5 @@
 package com.raimon.dogfriendly.api;
 
-import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,7 +55,7 @@ public class PerroController {
 
     @GetMapping("")
     public ResponseEntity<Page<PerroEntity>> getPage(
-            @ParameterObject @PageableDefault(page = 0, size = 5, direction = Sort.Direction.DESC) Pageable oPageable,
+            @PageableDefault(page = 0, size = 5, direction = Sort.Direction.DESC) Pageable oPageable,
             @RequestParam(name = "filter", required = false) String strFilter,
             @RequestParam(name = "usuario", required = false) Long lUsuario,
             @RequestParam(name = "raza", required = false) Long lRaza) {

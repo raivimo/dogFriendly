@@ -70,6 +70,17 @@ public class AuthService {
             }
         }
     }
+
+    public Long getUserID(){
+        String strUser = (String) oRequest.getAttribute("user");
+        UsuarioEntity oUsuarioEntity = oUsuarioRepository.findByLogin(strUser);
+        if( oUsuarioEntity != null ){
+            return oUsuarioEntity.getId();
+        } else {
+            throw new UnauthorizedException("this request is only allowed to admin role");
+        }
+
+    }
     
   
 
