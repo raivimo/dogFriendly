@@ -22,7 +22,7 @@ public class JwtHelper {
         return Keys.hmacShaKeyFor((SECRET + ISSUER + SECRET).getBytes());
     }
 
-    public static String generateJWT(String name) {
+    public static String generateJWT(String name, String usertype) {
 
         Date currentTime = Date.from(Instant.now());
         Date expiryTime = Date.from(Instant.now().plus(Duration.ofSeconds(9600)));
@@ -33,6 +33,7 @@ public class JwtHelper {
                .setIssuedAt(currentTime)
                .setExpiration(expiryTime)
                .claim("name", name)
+               .claim("usertype", usertype)
                .signWith(secretKey())
                .compact();
     }

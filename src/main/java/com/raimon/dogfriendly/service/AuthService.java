@@ -30,7 +30,7 @@ public class AuthService {
         if (oUsuarioBean.getPassword() != null) {
             UsuarioEntity oUsuarioEntity = oUsuarioRepository.findByLoginAndPassword(oUsuarioBean.getLogin(), oUsuarioBean.getPassword());
             if (oUsuarioEntity != null) {
-                return JwtHelper.generateJWT(oUsuarioBean.getLogin());
+                return JwtHelper.generateJWT(oUsuarioEntity.getLogin(), oUsuarioEntity.getTipousuario().getNombre());
             } else {
                 throw new UnauthorizedException("login or password incorrect");
             }
@@ -42,7 +42,7 @@ public class AuthService {
     public UsuarioEntity check() {
         String strUsuarioName = (String) oRequest.getAttribute("usuario");
         if (strUsuarioName != null) {
-            UsuarioEntity oUsuarioEntity = oUsuarioRepository.findByLogin(strUsuarioName);
+            UsuarioEntity oUsuarioEntity = oUsuarioRepository.findByLogin(strUsuarioName);  
             return oUsuarioEntity;
         } else {
             throw new UnauthorizedException("No active session");
@@ -72,12 +72,12 @@ public class AuthService {
     }
 
     public Long getUserID(){
-        String strUser = (String) oRequest.getAttribute("user");
+        String strUser = (String) oRequest.getAttribute("usuario");
         UsuarioEntity oUsuarioEntity = oUsuarioRepository.findByLogin(strUser);
         if( oUsuarioEntity != null ){
             return oUsuarioEntity.getId();
         } else {
-            throw new UnauthorizedException("this request is only allowed to admin role");
+            throw new UnknownError("La entidad viene nula");
         }
 
     }
