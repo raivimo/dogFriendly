@@ -77,8 +77,8 @@ public class UsuarioService {
     }
 
     public Long create(UsuarioEntity oNewUsuarioEntity) {
-        /* oAuthService.OnlyAdmins(); */
-        validate(oNewUsuarioEntity);
+       /*  oAuthService.OnlyAdmins();
+        validate(oNewUsuarioEntity); */
         oNewUsuarioEntity.setId(0L);
         oNewUsuarioEntity.setPassword(DOGFRIENDLY_DEFAULT_PASSWORD);
         return oUsuarioRepository.save(oNewUsuarioEntity).getId();

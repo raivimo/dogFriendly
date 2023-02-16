@@ -3,6 +3,7 @@
 /home/raimon/server_projects/dogfriendly/src/main/java/com/raimon/dogfriendly/bean/CaptchaBean.java
 /home/raimon/server_projects/dogfriendly/src/main/java/com/raimon/dogfriendly/service/AuthService.java
 /home/raimon/server_projects/dogfriendly/src/main/java/com/raimon/dogfriendly/exception/ResourceNotModifiedException.java
+/home/raimon/server_projects/dogfriendly/src/main/java/com/raimon/dogfriendly/filter/JWTFilter.java
 /home/raimon/server_projects/dogfriendly/src/main/java/com/raimon/dogfriendly/service/FacturaService.java
 /home/raimon/server_projects/dogfriendly/src/main/java/com/raimon/dogfriendly/entity/FacturaEntity.java
 /home/raimon/server_projects/dogfriendly/src/main/java/com/raimon/dogfriendly/api/TipousuarioController.java

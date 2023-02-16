@@ -67,7 +67,7 @@ public class ValidationHelper {
     }
 
     public static void validateLogin(String strLogin, String error) {
-        validateStringLength(strLogin, 6, 20, error);
+        validateStringLength(strLogin, 3, 20, error);
         String ePattern = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){4,18}[a-zA-Z0-9]$";
         java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
         java.util.regex.Matcher m = p.matcher(strLogin);
