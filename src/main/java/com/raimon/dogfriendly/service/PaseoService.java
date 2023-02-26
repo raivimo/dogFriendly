@@ -84,6 +84,12 @@ public class PaseoService {
         }
     }
 
+    public List<PaseoEntity> getListaPaseosDueñoMascota(Long lUsuario){
+        List<PaseoEntity> oList = null;
+        oList = oPaseoRepository.paseosDueñoMascostas(lUsuario);
+        return oList;
+    }
+
     public Page<PaseoEntity> getPage(Pageable oPageable, String strFilter, Long id_tipopaseo, Long id_usuario,
             Long id_perro) {
         /* oAuthService.OnlyAdmins(); */

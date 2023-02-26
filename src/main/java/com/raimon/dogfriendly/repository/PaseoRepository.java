@@ -1,5 +1,7 @@
 package com.raimon.dogfriendly.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +14,9 @@ public interface PaseoRepository extends JpaRepository<PaseoEntity, Long> {
         Page<PaseoEntity> findByLugar(String lugar, Pageable oPageable);
 
         Page<PaseoEntity>findByUsuarioId(Long lUsuario, Pageable oPageable);
+
+        @Query( value = "select * from usuario inner join perro on usuario.id = perro.id_usuario inner join paseo on perro.id = paseo.id_perro where usuario.id = ?1", nativeQuery = true)
+        List<PaseoEntity>paseosDueñoMascostas(Long lUsuario);
 
         @Query(value = "SELECT * FROM paseo WHERE (fecha LIKE  %?1% OR lugar LIKE %?2%)", nativeQuery = true)
         Page<PaseoEntity>findByFechaOrLugarContaining(String fecha, String lugar, Pageable oPageable);
