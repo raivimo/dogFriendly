@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+
 @Entity
 @Table(name = "paseo")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -41,7 +42,6 @@ public class PaseoEntity  {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_usuario")
     private UsuarioEntity usuario;
-
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_perro")
@@ -49,7 +49,6 @@ public class PaseoEntity  {
 
     @OneToMany(mappedBy = "paseo", fetch = FetchType.LAZY)
     private final List<FacturaEntity> facturas;
-
 
     public PaseoEntity(){
         this.facturas = new ArrayList<>();

@@ -61,7 +61,7 @@ public class PaseoService {
 
     public Long create(PaseoEntity oNewPaseoEntity) {
         /* oAuthService.OnlyAdmins(); */
-        //validate(oNewPaseoEntity);
+        // validate(oNewPaseoEntity);
         oNewPaseoEntity.setId(0L);
         return oPaseoRepository.save(oNewPaseoEntity).getId();
     }
@@ -84,10 +84,24 @@ public class PaseoService {
         }
     }
 
-    public List<PaseoEntity> getListaPaseosDueñoMascota(Long lUsuario){
-        List<PaseoEntity> oList = null;
-        oList = oPaseoRepository.paseosDueñoMascostas(lUsuario);
-        return oList;
+    public Page<PaseoEntity> getPaseosDueñoMascota(Pageable oPageable, Long id_usuario) {
+        ValidationHelper.validateRPP(oPageable.getPageSize());
+        Page<PaseoEntity> oPage = null;
+        if (id_usuario == null) {
+            oPaseoRepository.findByUsuarioId(id_usuario, oPageable);
+        }
+        oPage = oPaseoRepository.paseosDueñoMascostas(id_usuario, oPageable);
+        return oPage;
+    }
+
+    public Page<PaseoEntity> getPage2(Pageable oPageable, Long id_usuario) {
+        // oAuthService.OnlyAdmins();
+        ValidationHelper.validateRPP(oPageable.getPageSize());
+        Page<PaseoEntity> oPage = null;
+        oPage = oPaseoRepository
+                .paseosDueñoMascostas(id_usuario, oPageable);
+
+        return oPage;
     }
 
     public Page<PaseoEntity> getPage(Pageable oPageable, String strFilter, Long id_tipopaseo, Long id_usuario,
@@ -168,25 +182,25 @@ public class PaseoService {
     }
 
     private PaseoEntity generatePaseo() {
-            PaseoEntity oPaseoEntity = new PaseoEntity();
-            oPaseoEntity.setLugar(nombreLugar.get(RandomHelper.getRandomInt(0, nombreLugar.size() - 1)));
-            oPaseoEntity.setFecha((RandomHelper.getRandomLocalDate()));
-            oPaseoEntity.setPrecio(RandomHelper.getRandomInt(5, 25));
+        PaseoEntity oPaseoEntity = new PaseoEntity();
+        oPaseoEntity.setLugar(nombreLugar.get(RandomHelper.getRandomInt(0, nombreLugar.size() - 1)));
+        oPaseoEntity.setFecha((RandomHelper.getRandomLocalDate()));
+        oPaseoEntity.setPrecio(RandomHelper.getRandomInt(5, 25));
 
-            List<TipopaseoEntity> allTipoPaseo = oTipopaseoRepository.findAll();
-            TipopaseoEntity randomTipoPaseo = allTipoPaseo.get(RandomHelper.getRandomInt(0, allTipoPaseo.size() - 1));
-            oPaseoEntity.setTipopaseo(randomTipoPaseo);
+        List<TipopaseoEntity> allTipoPaseo = oTipopaseoRepository.findAll();
+        TipopaseoEntity randomTipoPaseo = allTipoPaseo.get(RandomHelper.getRandomInt(0, allTipoPaseo.size() - 1));
+        oPaseoEntity.setTipopaseo(randomTipoPaseo);
 
-            List<UsuarioEntity> allUsuarios = oUsuarioRepository.findAll();
-            UsuarioEntity randomUsuario = allUsuarios.get(RandomHelper.getRandomInt(0, allUsuarios.size() - 1));
-            oPaseoEntity.setUsuario(randomUsuario);
+        List<UsuarioEntity> allUsuarios = oUsuarioRepository.findAll();
+        UsuarioEntity randomUsuario = allUsuarios.get(RandomHelper.getRandomInt(0, allUsuarios.size() - 1));
+        oPaseoEntity.setUsuario(randomUsuario);
 
-            List<PerroEntity> allPerros = oPerroRepository.findAll();
-            PerroEntity randomPerro = allPerros.get(RandomHelper.getRandomInt(0, allPerros.size() - 1));
-            oPaseoEntity.setPerro(randomPerro);
-            
-            return oPaseoEntity;
-        }
+        List<PerroEntity> allPerros = oPerroRepository.findAll();
+        PerroEntity randomPerro = allPerros.get(RandomHelper.getRandomInt(0, allPerros.size() - 1));
+        oPaseoEntity.setPerro(randomPerro);
+
+        return oPaseoEntity;
+    }
 
     public PaseoEntity generateOne() {
         // oAuthService.OnlyAdmins();
