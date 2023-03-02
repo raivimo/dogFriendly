@@ -18,7 +18,8 @@ public interface PaseoRepository extends JpaRepository<PaseoEntity, Long> {
 
         Page<PaseoEntity>findByUsuarioId(Long lUsuario, Pageable oPageable);
 
-        @Query(value = "SELECT * FROM usuario INNER JOIN perro ON usuario.id = perro.id_usuario INNER JOIN paseo ON perro.id = paseo.id_perro WHERE usuario.id = ?1",  nativeQuery = true)
+        //@Query(value = "SELECT * FROM usuario INNER JOIN perro ON usuario.id = perro.id_usuario INNER JOIN paseo ON perro.id = paseo.id_perro WHERE usuario.id = ?1",  nativeQuery = true)
+        @Query(value = "SELECT * FROM paseo INNER JOIN perro ON paseo.id_perro = perro.id INNER JOIN usuario ON perro.id_usuario = usuario.id WHERE usuario.id = ?1",  nativeQuery = true)
         Page<PaseoEntity>paseosDueñoMascostas(Long lUsuario, Pageable oPageable);
 
         @Query(value = "SELECT * FROM paseo WHERE (fecha LIKE  %?1% OR lugar LIKE %?2%)", nativeQuery = true)
