@@ -1,5 +1,6 @@
 package com.raimon.dogfriendly.api;
 
+import java.util.List;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.raimon.dogfriendly.entity.PaseoEntity;
+import com.raimon.dogfriendly.entity.UsuarioEntity;
 import com.raimon.dogfriendly.service.PaseoService;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,6 +55,14 @@ public class PaseoController {
     public ResponseEntity<Long> count() {
         return new ResponseEntity<Long>(oPaseoService.count(), HttpStatus.OK);
     }
+
+    @GetMapping("/paseosDuenyo")
+    public ResponseEntity<Page<PaseoEntity>> getPage(
+            @ParameterObject @PageableDefault(page = 0, size = 5, direction = Sort.Direction.DESC) Pageable oPageable,
+            @RequestParam(name = "usuario", required = false) Long lUsuario) {
+        return new ResponseEntity<Page<PaseoEntity>>(oPaseoService.getPage2(oPageable, lUsuario), HttpStatus.OK);
+    }
+
 
     @GetMapping("")
     public ResponseEntity<Page<PaseoEntity>> getPage(
