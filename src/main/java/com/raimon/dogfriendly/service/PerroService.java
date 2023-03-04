@@ -94,6 +94,11 @@ public class PerroService {
         }
     }
 
+    public List<PerroEntity> getListPerrosUsuario(Long id_usuario){
+        List<PerroEntity> oList = null;
+        return oList = oPerroRepository.findListPerrosUsuario(id_usuario);
+    }
+
     public Page<PerroEntity> getPage(Pageable oPageable, String strFilter, Long id_usuario, Long id_raza) {
         // oAuthService.OnlyAdmins();
         ValidationHelper.validateRPP(oPageable.getPageSize());
