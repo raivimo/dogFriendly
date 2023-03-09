@@ -64,8 +64,7 @@ public class PerroService {
 
     public Long update(PerroEntity oPerroEntity) {
         validate(oPerroEntity.getId());
-        // oAuthService.OnlyAdmins();
-        PerroEntity oOldPerroEntity = oPerroRepository.getReferenceById(oPerroEntity.getId());
+        oPerroRepository.getReferenceById(oPerroEntity.getId());
         return oPerroRepository.save(oPerroEntity).getId();
     }
 
@@ -86,12 +85,16 @@ public class PerroService {
             int iPosicion = RandomHelper.getRandomInt(0, (int) oPerroRepository.count() - 1);
             Pageable oPageable = PageRequest.of(iPosicion, 1);
             Page<PerroEntity> perroPage = oPerroRepository.findAll(oPageable);
-            List<PerroEntity> perroList = perroPage.getContent();
+            perroPage.getContent();
             oPerroEntity = oPerroRepository.getReferenceById(oPerroEntity.getId());
             return oPerroEntity;
         } else {
             throw new CannotPerformOperationException("ho hay usuarios en la base de datos");
         }
+    }
+
+    public List<PerroEntity> getListPerrosUsuario(Long id_usuario){
+        return oPerroRepository.findListPerrosUsuario(id_usuario);
     }
 
     public Page<PerroEntity> getPage(Pageable oPageable, String strFilter, Long id_usuario, Long id_raza) {

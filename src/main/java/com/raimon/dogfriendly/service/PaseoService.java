@@ -66,10 +66,17 @@ public class PaseoService {
         return oPaseoRepository.save(oNewPaseoEntity).getId();
     }
 
+    public Long createList (PaseoEntity [] oNewPaseoEntities){
+        for (int i = 0; i < oNewPaseoEntities.length; i++) {
+            oNewPaseoEntities[i].setId(0L);
+            oPaseoRepository.save(oNewPaseoEntities[i]);
+        }
+        return  oPaseoRepository.count();
+    }
+
     public Long update(PaseoEntity oPaseoEntity) {
         validate(oPaseoEntity.getId());
-        // oAuthService.OnlyAdmins();
-        PaseoEntity oOldPaseoEntity = oPaseoRepository.getReferenceById(oPaseoEntity.getId());
+        oPaseoRepository.getReferenceById(oPaseoEntity.getId());
         return oPaseoRepository.save(oPaseoEntity).getId();
     }
 
@@ -84,25 +91,20 @@ public class PaseoService {
         }
     }
 
-    public Page<PaseoEntity> getPaseosDueñoMascota(Pageable oPageable, Long id_usuario) {
+   /*  public Page<PaseoEntity> getPaseosDueñoMascota(Pageable oPageable, Long id_usuario) {
         ValidationHelper.validateRPP(oPageable.getPageSize());
         Page<PaseoEntity> oPage = null;
-        if (id_usuario == null) {
-            oPaseoRepository.findByUsuarioId(id_usuario, oPageable);
-        }
-        oPage = oPaseoRepository.paseosDueñoMascostas(id_usuario, oPageable);
-        return oPage;
+        oPage = oPaseoRepository.findByPaseosDueñoMascostas(id_usuario, oPageable);
+        return oPage ;
+    } */
+
+    public List<PaseoEntity> getPaseosDueñoMascota(Long id_usuario) {
+        List<PaseoEntity> oList = null;
+        oList = oPaseoRepository.findByPaseosDueñoMascostas(id_usuario);
+        return oList ;
     }
 
-    public Page<PaseoEntity> getPage2(Pageable oPageable, Long id_usuario) {
-        // oAuthService.OnlyAdmins();
-        ValidationHelper.validateRPP(oPageable.getPageSize());
-        Page<PaseoEntity> oPage = null;
-        oPage = oPaseoRepository
-                .paseosDueñoMascostas(id_usuario, oPageable);
 
-        return oPage;
-    }
 
     public Page<PaseoEntity> getPage(Pageable oPageable, String strFilter, Long id_tipopaseo, Long id_usuario,
             Long id_perro) {

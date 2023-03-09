@@ -1,16 +1,11 @@
 package com.raimon.dogfriendly.repository;
 
-import java.util.List;
-
-import javax.persistence.NamedQuery;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
 import com.raimon.dogfriendly.entity.PaseoEntity;
+import java.util.*;
 
 public interface PaseoRepository extends JpaRepository<PaseoEntity, Long> {
 
@@ -18,9 +13,11 @@ public interface PaseoRepository extends JpaRepository<PaseoEntity, Long> {
 
         Page<PaseoEntity>findByUsuarioId(Long lUsuario, Pageable oPageable);
 
-        //@Query(value = "SELECT * FROM usuario INNER JOIN perro ON usuario.id = perro.id_usuario INNER JOIN paseo ON perro.id = paseo.id_perro WHERE usuario.id = ?1",  nativeQuery = true)
+        /* @Query(value = "SELECT * FROM paseo INNER JOIN perro ON paseo.id_perro = perro.id INNER JOIN usuario ON perro.id_usuario = usuario.id WHERE usuario.id = ?1",  nativeQuery = true)
+        Page<PaseoEntity>findByPaseosDueñoMascostas(Long lUsuario, Pageable oPageable); */
+
         @Query(value = "SELECT * FROM paseo INNER JOIN perro ON paseo.id_perro = perro.id INNER JOIN usuario ON perro.id_usuario = usuario.id WHERE usuario.id = ?1",  nativeQuery = true)
-        Page<PaseoEntity>paseosDueñoMascostas(Long lUsuario, Pageable oPageable);
+        List<PaseoEntity>findByPaseosDueñoMascostas(Long lUsuario);
 
         @Query(value = "SELECT * FROM paseo WHERE (fecha LIKE  %?1% OR lugar LIKE %?2%)", nativeQuery = true)
         Page<PaseoEntity>findByFechaOrLugarContaining(String fecha, String lugar, Pageable oPageable);

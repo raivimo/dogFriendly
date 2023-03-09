@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import java.util.List;
 
 import com.raimon.dogfriendly.entity.PerroEntity;
 
@@ -14,6 +15,10 @@ public interface PerroRepository extends JpaRepository<PerroEntity, Long> {
         Page<PerroEntity> findByRazaId(Long raza, Pageable oPageable);
 
         Page<PerroEntity> findByNombreIgnoreCaseContaining(String strFilter, Pageable oPageable);
+
+        @Query(value= "SELECT * FROM perro WHERE id_usuario = ?1", nativeQuery = true)
+        List<PerroEntity>findListPerrosUsuario(Long id_usuario);
+        
 
         @Query(value = "SELECT * FROM perro WHERE id_usuario = ?1 AND (nombre LIKE  %?2% AND fechaNacimiento LIKE %?3%)", nativeQuery = true)
         Page<PerroEntity> findByUsuarioIdAndNombreIgnoreCaseContainingOrFechaNacimientoIgnoreCaseContaining(

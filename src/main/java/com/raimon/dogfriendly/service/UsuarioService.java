@@ -114,7 +114,7 @@ public class UsuarioService {
             int iPosicion = RandomHelper.getRandomInt(0, (int) oUsuarioRepository.count() - 1);
             Pageable oPageable = PageRequest.of(iPosicion, 1);
             Page<UsuarioEntity> usuarioPage = oUsuarioRepository.findAll(oPageable);
-            List<UsuarioEntity> usuarioList = usuarioPage.getContent();
+            usuarioPage.getContent();
             oUsuarioEntity = oUsuarioRepository.getReferenceById(oUsuarioEntity.getId());
             return oUsuarioEntity;
         } else {

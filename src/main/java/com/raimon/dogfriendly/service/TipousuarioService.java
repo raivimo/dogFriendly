@@ -69,7 +69,7 @@ public class TipousuarioService {
             int iPosicion = RandomHelper.getRandomInt(0, (int) oTipousuarioRepository.count() - 1);
             Pageable oPageable = PageRequest.of(iPosicion, 1);
             Page<TipousuarioEntity> TipoUsuarioPage = oTipousuarioRepository.findAll(oPageable);
-            List<TipousuarioEntity> usuarioList = TipoUsuarioPage.getContent();
+            TipoUsuarioPage.getContent();
             oTipoTipousuarioEntity = oTipousuarioRepository.getReferenceById(oTipoTipousuarioEntity.getId());
             return oTipoTipousuarioEntity;
         } else {
