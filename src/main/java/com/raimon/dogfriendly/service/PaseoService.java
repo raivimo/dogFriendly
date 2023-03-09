@@ -66,10 +66,17 @@ public class PaseoService {
         return oPaseoRepository.save(oNewPaseoEntity).getId();
     }
 
+    public Long createList (PaseoEntity [] oNewPaseoEntities){
+        for (int i = 0; i < oNewPaseoEntities.length; i++) {
+            oNewPaseoEntities[i].setId(0L);
+            oPaseoRepository.save(oNewPaseoEntities[i]);
+        }
+        return  oPaseoRepository.count();
+    }
+
     public Long update(PaseoEntity oPaseoEntity) {
         validate(oPaseoEntity.getId());
-        // oAuthService.OnlyAdmins();
-        PaseoEntity oOldPaseoEntity = oPaseoRepository.getReferenceById(oPaseoEntity.getId());
+        oPaseoRepository.getReferenceById(oPaseoEntity.getId());
         return oPaseoRepository.save(oPaseoEntity).getId();
     }
 
@@ -85,7 +92,6 @@ public class PaseoService {
     }
 
     public Page<PaseoEntity> getPaseosDueñoMascota(Pageable oPageable, Long id_usuario) {
-        ValidationHelper.validateRPP(oPageable.getPageSize());
         Page<PaseoEntity> oPage = null;
         if (id_usuario == null) {
             oPaseoRepository.findByUsuarioId(id_usuario, oPageable);

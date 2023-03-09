@@ -54,8 +54,7 @@ public class FacturaService {
 
     public Long update(FacturaEntity oFacturaEntity) {
         validate(oFacturaEntity.getId());
-        // oAuthService.OnlyAdmins();
-        FacturaEntity oOldFacturaEntity = oFacturaRepository.getReferenceById(oFacturaEntity.getId());
+        oFacturaRepository.getReferenceById(oFacturaEntity.getId());
         return oFacturaRepository.save(oFacturaEntity).getId();
     }
 

@@ -51,8 +51,7 @@ public class TipopaseoService {
 
     public Long update(TipopaseoEntity oTipopaseoEntity) {
         validate(oTipopaseoEntity.getId());
-        // oAuthService.OnlyAdmins();
-        TipopaseoEntity oOldTipopaseoEntity = oTipopaseoRepository.getReferenceById(oTipopaseoEntity.getId());
+        oTipopaseoRepository.getReferenceById(oTipopaseoEntity.getId());
         return oTipopaseoRepository.save(oTipopaseoEntity).getId();
     }
 

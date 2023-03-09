@@ -1,6 +1,5 @@
 package com.raimon.dogfriendly.api;
 
-import java.util.List;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.raimon.dogfriendly.entity.PaseoEntity;
-import com.raimon.dogfriendly.entity.UsuarioEntity;
 import com.raimon.dogfriendly.service.PaseoService;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,6 +39,11 @@ public class PaseoController {
         return new ResponseEntity<Long>(oPaseoService.create(oNewPaseoEntity), HttpStatus.OK);
     }
 
+    @PostMapping("/multiplesPaseos")
+    public ResponseEntity<Long> createMultiplesPaseos(@RequestBody PaseoEntity [] oNewPaseoEntity ) {
+        return new ResponseEntity<Long>(oPaseoService.createList(oNewPaseoEntity), HttpStatus.OK);
+    }
+
     @PutMapping
     public ResponseEntity<Long> update(@RequestBody PaseoEntity oPaseoEntity) {
         return new ResponseEntity<Long>(oPaseoService.update(oPaseoEntity), HttpStatus.OK);
@@ -58,7 +61,7 @@ public class PaseoController {
 
     @GetMapping("/paseosDuenyo")
     public ResponseEntity<Page<PaseoEntity>> getPage(
-            @ParameterObject @PageableDefault(page = 0, size = 5, direction = Sort.Direction.DESC) Pageable oPageable,
+            @ParameterObject @PageableDefault(page = 0, size = 4, direction = Sort.Direction.DESC) Pageable oPageable,
             @RequestParam(name = "usuario", required = false) Long lUsuario) {
         return new ResponseEntity<Page<PaseoEntity>>(oPaseoService.getPage2(oPageable, lUsuario), HttpStatus.OK);
     }
