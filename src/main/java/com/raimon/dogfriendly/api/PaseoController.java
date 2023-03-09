@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.*;
+
 import com.raimon.dogfriendly.entity.PaseoEntity;
 import com.raimon.dogfriendly.service.PaseoService;
 
@@ -59,11 +61,17 @@ public class PaseoController {
         return new ResponseEntity<Long>(oPaseoService.count(), HttpStatus.OK);
     }
 
-    @GetMapping("/paseosDuenyo")
+/*     @GetMapping("/paseosDuenyo")
     public ResponseEntity<Page<PaseoEntity>> getPage(
             @ParameterObject @PageableDefault(page = 0, size = 5, direction = Sort.Direction.DESC) Pageable oPageable,
             @RequestParam(name = "usuario", required = true) Long lUsuario) {
         return new ResponseEntity<Page<PaseoEntity>>(oPaseoService.getPaseosDueñoMascota(oPageable, lUsuario), HttpStatus.OK);
+    } */
+
+    @GetMapping("/paseosDuenyo")
+    public ResponseEntity<List<PaseoEntity>> getPage(
+            @RequestParam(name = "usuario", required = true) Long lUsuario) {
+        return new ResponseEntity<List<PaseoEntity>>(oPaseoService.getPaseosDueñoMascota(lUsuario), HttpStatus.OK);
     }
 
 
