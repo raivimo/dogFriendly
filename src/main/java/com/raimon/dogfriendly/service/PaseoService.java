@@ -92,23 +92,12 @@ public class PaseoService {
     }
 
     public Page<PaseoEntity> getPaseosDueñoMascota(Pageable oPageable, Long id_usuario) {
-        Page<PaseoEntity> oPage = null;
-        if (id_usuario == null) {
-            oPaseoRepository.findByUsuarioId(id_usuario, oPageable);
-        }
-        oPage = oPaseoRepository.paseosDueñoMascostas(id_usuario, oPageable);
-        return oPage;
-    }
-
-    public Page<PaseoEntity> getPage2(Pageable oPageable, Long id_usuario) {
-        // oAuthService.OnlyAdmins();
         ValidationHelper.validateRPP(oPageable.getPageSize());
         Page<PaseoEntity> oPage = null;
-        oPage = oPaseoRepository
-                .paseosDueñoMascostas(id_usuario, oPageable);
-
+        oPage = oPaseoRepository.findByPaseosDueñoMascostas(id_usuario, oPageable);
         return oPage;
     }
+
 
     public Page<PaseoEntity> getPage(Pageable oPageable, String strFilter, Long id_tipopaseo, Long id_usuario,
             Long id_perro) {

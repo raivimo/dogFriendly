@@ -61,9 +61,9 @@ public class PaseoController {
 
     @GetMapping("/paseosDuenyo")
     public ResponseEntity<Page<PaseoEntity>> getPage(
-            @ParameterObject @PageableDefault(page = 0, size = 4, direction = Sort.Direction.DESC) Pageable oPageable,
-            @RequestParam(name = "usuario", required = false) Long lUsuario) {
-        return new ResponseEntity<Page<PaseoEntity>>(oPaseoService.getPage2(oPageable, lUsuario), HttpStatus.OK);
+            @ParameterObject @PageableDefault(page = 0, size = 5, direction = Sort.Direction.DESC) Pageable oPageable,
+            @RequestParam(name = "usuario", required = true) Long lUsuario) {
+        return new ResponseEntity<Page<PaseoEntity>>(oPaseoService.getPaseosDueñoMascota(oPageable, lUsuario), HttpStatus.OK);
     }
 
 
